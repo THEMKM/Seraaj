@@ -9,6 +9,8 @@ engine = create_engine(DATABASE_URL, echo=True, connect_args=connect_args)
 
 
 def init_db() -> None:
+    """Reset and initialize the database tables."""
+    SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
 
 

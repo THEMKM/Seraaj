@@ -20,9 +20,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
           pip install pytest
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install frontend deps
+        run: |
+          cd frontend && npm ci
       - name: Lint
         run: |
           python -m compileall backend/app
       - name: Test
         run: |
           pytest backend/tests -q
+      - name: Playwright tests
+        run: |
+          npx playwright install --with-deps
+          cd frontend && npx playwright test

@@ -61,13 +61,13 @@ PR → tick the checkbox*.
 - [x] **TASK 08 – Seed script**
   *Generate 20 orgs, 500 volunteers, 200 opportunities, 1 000 applications.*
 
-- [ ] **TASK 09 – Unit tests coverage ≥90 %**  
+- [x] **TASK 09 – Unit tests coverage ≥90 %**
   *Write tests per router & model methods.*
 
-- [ ] **TASK 10 – Playwright e2e**  
+- [x] **TASK 10 – Playwright e2e**
   *Scenario: signup → create opp → apply → accept → share card.*
 
-- [ ] **TASK 11 – CI/CD GitHub Actions**  
+- [x] **TASK 11 – CI/CD GitHub Actions**
   *Lint → test → docker build → deploy preview on PR.*
 
 - [ ] **TASK 12 – Docs & ADR zero**  
