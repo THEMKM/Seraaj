@@ -99,38 +99,38 @@ Happy hacking! 🚀
 
 The following tasks expand the front-end according to the "Seraaj Front-End Spec & User Stories" document. Implement them sequentially, following the interaction contract above. Each task should be completed in its own branch and accompanied by unit/e2e tests and documentation updates where noted.
 
-- [ ] **UI01 – Landing Page**  
+- [x] **UI01 – Landing Page**
   *Implement `/` with hero header, feature blocks and footer.*  
   *CTA buttons route to `/signup` and `/login`.*  
   *Ensure mobile and desktop layouts with Tailwind; add accessibility labels.*
 
-- [ ] **UI02 – Auth Pages**  
+- [x] **UI02 – Auth Pages**
   *Create `/signup` and `/login` pages with email & password fields, Google auth button, and form validation.*  
   *After success redirect to `/dashboard`.*  
   *Write e2e test covering signup and login flow.*
 
-- [ ] **UI03 – Volunteer Dashboard**  
+- [x] **UI03 – Volunteer Dashboard**
   *Show profile completion meter and recommended opportunities.*  
   *List recent applications in a table.*  
   *Integrate TanStack Query for API calls.*
 
-- [ ] **UI04 – Opportunities List**  
+- [x] **UI04 – Opportunities List**
   *Implement filters (keywords, skills multiselect, location autocomplete, remote toggle) and sorting.*  
   *Display results using `OpportunityCard` component; show empty and error states.*
 
-- [ ] **UI05 – Opportunity Detail**  
+- [x] **UI05 – Opportunity Detail**
   *Create detail view with apply button, markdown description, and organization sidebar.*  
   *Sticky Apply button on mobile.*
 
-- [ ] **UI06 – Org Admin Dashboard**  
+- [x] **UI06 – Org Admin Dashboard**
   *Show stats widgets and opportunities table with bulk actions.*  
   *Add link to create new opportunity.*
 
-- [ ] **UI07 – Opportunity Form**  
+- [x] **UI07 – Opportunity Form**
   *Page for create/edit opportunity with validation (title ≥5 chars, description ≥20, dates logic).*  
   *Save draft and publish flows, redirect back with toast.*
 
-- [ ] **UI08 – Applicant Review**  
+- [x] **UI08 – Applicant Review**
   *Tabbed view of applicants sorted by match score.*  
   *Accept/Decline actions with undo snackbar.*  
   *"Share Recognition" modal with preview and share buttons.*
@@ -139,7 +139,7 @@ The following tasks expand the front-end according to the "Seraaj Front-End Spec
   *Toggle feature flags and show system health chips.*  
   *Refresh button fetches latest status.*
 
-- [ ] **UI10 – Reusable Components**  
+- [x] **UI10 – Reusable Components**
   *Build `OpportunityCard`, `ProfileCompletionMeter`, `DataTable`, `Modal`, `Snackbar`, and `FormField` as described.*
 
 - [ ] **UI11 – Theme & Dark Mode**  
