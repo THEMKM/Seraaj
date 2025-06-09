@@ -76,7 +76,7 @@ PR → tick the checkbox*.
 - [ ] **TASK 11 – CI/CD GitHub Actions**  
   *Lint → test → docker build → deploy preview on PR.*
 
-- [ ] **TASK 12 – Docs & ADR zero**  
+- [x] **TASK 12 – Docs & ADR zero**
   *Write Architecture Decision Record 0001: “Stack & Folder Layout”.*
 
 ---
