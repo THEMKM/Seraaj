@@ -3,5 +3,7 @@ __pycache__/
 .env
 venv/
 backend/seraaj.db
+seraaj.db
+.coverage
 node_modules/
 frontend/dist/

@@ -1,14 +1,24 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import OpportunityCard from '../components/OpportunityCard';
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import OpportunityCard from "../components/OpportunityCard";
 
 export default function Opportunities() {
-  const [keywords, setKeywords] = useState('');
-  const { data: results = [] } = useQuery(['search', keywords], async () => {
-    const params = new URLSearchParams({ q: keywords });
-    const res = await fetch(`/api/opportunity/search?${params.toString()}`);
-    if (!res.ok) return [];
-    return res.json();
+  const [keywords, setKeywords] = useState("");
+  interface Result {
+    id: string;
+    title: string;
+    orgName: string;
+  }
+
+  const { data: results = [] } = useQuery<Result[]>({
+    queryKey: ["search", keywords],
+    queryFn: async () => {
+      const params = new URLSearchParams({ q: keywords });
+      const res = await fetch(`/api/opportunity/search?${params.toString()}`);
+      if (!res.ok) return [] as Result[];
+      return res.json();
+    },
+    initialData: [],
   });
 
   return (
