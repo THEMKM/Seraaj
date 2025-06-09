@@ -27,3 +27,11 @@ Create a new migration after editing models:
 ```bash
 alembic revision --autogenerate -m "describe change"
 ```
+
+### Matching job
+
+Run Celery with beat to compute match scores daily:
+
+```bash
+celery -A app.matching worker -B --loglevel=info
+```

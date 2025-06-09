@@ -49,10 +49,10 @@ PR → tick the checkbox*.
 - [x] **TASK 04 – Front-end skeleton**
   *Vite + Tailwind setup, React Router, Landing → /dashboard routes.*
 
-- [ ] **TASK 05 – Secure API proxy**  
+- [x] **TASK 05 – Secure API proxy**
   *`vite.config.ts` devProxy `/api/*` → `http://localhost:8000`.*
 
-- [ ] **TASK 06 – Matching job v0**  
+- [x] **TASK 06 – Matching job v0**
   *Nightly Celery task computing cosine similarity and persisting `match_score`.*
 
 - [ ] **TASK 07 – Recognition card microservice**  

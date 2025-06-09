@@ -35,6 +35,7 @@ The frontend is built with Vite, React Router and Tailwind CSS.
 ### Environment variables
 
 Copy `.env.sample` to `.env` and review values. At minimum, set `SECRET_KEY` for JWT signing.
+Set `REDIS_URL` if you want background jobs to run (defaults to `redis://localhost:6379/0`).
 
 ### Database migrations
 
@@ -55,4 +56,13 @@ Generate a new migration after modifying models:
 
 ```bash
 alembic revision --autogenerate -m "describe change"
+```
+
+### Matching job
+
+Celery runs a nightly task to recompute volunteer–opportunity match scores.
+Start a worker with beat enabled:
+
+```bash
+celery -A app.matching worker -B --loglevel=info
 ```
