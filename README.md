@@ -49,3 +49,13 @@ uvicorn app.main:app --reload
 cd ../frontend
 npm i
 npm run dev
+```
+
+## Contributing
+
+Development tasks are organized in `AGENTS.md`. Follow the steps outlined there
+when contributing. Before opening a pull request, ensure tests pass locally:
+
+```bash
+make test
+```
