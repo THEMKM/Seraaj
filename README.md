@@ -79,3 +79,33 @@ celery -A app.matching worker -B --loglevel=info
 
 The `/recognition/{app_id}` endpoint generates a signed Cloudinary upload URL and
 returns a PNG link for social media sharing.
+
+### Local deployment
+
+You can try the full stack locally using Docker Compose for Postgres and Redis.
+
+```bash
+docker-compose up -d  # starts `db` and `redis` services
+```
+
+Apply migrations and seed demo data:
+
+```bash
+cd backend
+alembic upgrade head
+python seed.py  # optional sample data
+```
+
+Start the backend and frontend in separate terminals:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+```bash
+cd ../frontend
+npm run dev
+```
+
+The API is now available at `http://localhost:8000/docs` and the web app at
+`http://localhost:5173`.
