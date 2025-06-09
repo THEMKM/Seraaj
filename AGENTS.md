@@ -43,7 +43,7 @@ PR → tick the checkbox*.
 - [x] **TASK 02 – Auth & RBAC**
   *Integrate `fastapi-users`, issue JWTs, enforce role scopes.*
 
-- [ ] **TASK 03 – Database migrations**  
+- [x] **TASK 03 – Database migrations**  
   *Alembic env, autogenerate initial revision, connect to Postgres in docker-compose.*
 
 - [ ] **TASK 04 – Front-end skeleton**  

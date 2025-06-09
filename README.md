@@ -27,3 +27,24 @@ The frontend folder currently contains a stub React setup.
 ### Environment variables
 
 Copy `.env.sample` to `.env` and review values. At minimum, set `SECRET_KEY` for JWT signing.
+
+### Database migrations
+
+Run Postgres locally via docker compose:
+
+```bash
+docker-compose up -d db
+```
+
+Apply migrations with Alembic:
+
+```bash
+cd backend
+alembic upgrade head
+```
+
+Generate a new migration after modifying models:
+
+```bash
+alembic revision --autogenerate -m "describe change"
+```
