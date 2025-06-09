@@ -7,4 +7,18 @@ This repository contains the source code for **Seraaj**, a volunteer–organizat
 - `frontend/` – React application
 - `.github/workflows/` – CI/CD pipelines
 
-More details will be added as the project evolves.
+### Quick start
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+Run backend tests:
+
+```bash
+pytest
+```
+
+The frontend folder currently contains a stub React setup.
