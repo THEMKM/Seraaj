@@ -55,10 +55,10 @@ PR → tick the checkbox*.
 - [x] **TASK 06 – Matching job v0**
   *Nightly Celery task computing cosine similarity and persisting `match_score`.*
 
-- [ ] **TASK 07 – Recognition card microservice**  
+- [x] **TASK 07 – Recognition card microservice**
   *Cloudinary signed uploads; endpoint returns PNG URL.*
 
-- [ ] **TASK 08 – Seed script**  
+- [x] **TASK 08 – Seed script**
   *Generate 20 orgs, 500 volunteers, 200 opportunities, 1 000 applications.*
 
 - [ ] **TASK 09 – Unit tests coverage ≥90 %**  

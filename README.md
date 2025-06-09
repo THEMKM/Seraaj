@@ -32,6 +32,14 @@ npm run dev
 
 The frontend is built with Vite, React Router and Tailwind CSS.
 
+### Seeding demo data
+
+Run the seed script to populate the local database with sample data:
+
+```bash
+python backend/seed.py
+```
+
 ### Environment variables
 
 Copy `.env.sample` to `.env` and review values. At minimum, set `SECRET_KEY` for JWT signing.
@@ -66,3 +74,8 @@ Start a worker with beat enabled:
 ```bash
 celery -A app.matching worker -B --loglevel=info
 ```
+
+### Recognition service
+
+The `/recognition/{app_id}` endpoint generates a signed Cloudinary upload URL and
+returns a PNG link for social media sharing.

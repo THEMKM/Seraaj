@@ -10,3 +10,6 @@ httpx
 alembic
 celery
 redis
+cloudinary
+faker
+pytest-cov
