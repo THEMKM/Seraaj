@@ -109,3 +109,7 @@ npm run dev
 
 The API is now available at `http://localhost:8000/docs` and the web app at
 `http://localhost:5173`.
+
+The frontend includes a dark mode toggle in the top-right corner. Your choice is
+stored in `localStorage`. Superadmins can visit `/settings` to toggle feature
+flags and view basic system health.

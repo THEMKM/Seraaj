@@ -135,22 +135,22 @@ The following tasks expand the front-end according to the "Seraaj Front-End Spec
   *Accept/Decline actions with undo snackbar.*  
   *"Share Recognition" modal with preview and share buttons.*
 
-- [ ] **UI09 – Superadmin Settings**  
+- [x] **UI09 – Superadmin Settings**
   *Toggle feature flags and show system health chips.*  
   *Refresh button fetches latest status.*
 
 - [x] **UI10 – Reusable Components**
   *Build `OpportunityCard`, `ProfileCompletionMeter`, `DataTable`, `Modal`, `Snackbar`, and `FormField` as described.*
 
-- [ ] **UI11 – Theme & Dark Mode**  
+- [x] **UI11 – Theme & Dark Mode**
   *Configure Tailwind for primary/secondary colors, rounded corners and shadows.*  
   *Add dark mode toggle stored in localStorage.*
 
-- [ ] **UI12 – Animations & A11y**  
+- [x] **UI12 – Animations & A11y**
   *Use Framer Motion for card entry, modals, and snackbars.*  
   *Ensure all interactive elements are keyboard navigable and have ARIA labels.*
 
-- [ ] **UI13 – Frontend Tests**  
+- [x] **UI13 – Frontend Tests**
   *Expand Playwright tests to cover signup-apply-accept flow and common error cases.*  
   *Add React Testing Library unit tests for critical components.*
 

@@ -1,7 +1,15 @@
 from fastapi import FastAPI
 
 from .db import init_db
-from .routers import auth, volunteer, organization, opportunity, application, recognition
+from .routers import (
+    auth,
+    volunteer,
+    organization,
+    opportunity,
+    application,
+    recognition,
+    settings,
+)
 
 app = FastAPI(title="Seraaj API")
 
@@ -11,6 +19,7 @@ app.include_router(organization)
 app.include_router(opportunity)
 app.include_router(application)
 app.include_router(recognition)
+app.include_router(settings)
 
 
 @app.on_event("startup")

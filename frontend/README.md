@@ -21,6 +21,10 @@ During development, API requests to paths starting with `/api` are proxied to
 `http://localhost:8000`. This avoids CORS issues when running the backend and
 frontend separately.
 
+There is a dark mode toggle in the corner that persists via `localStorage`.
+Superadmins can access `/settings` to flip feature flags and check system
+health.
+
 During development, API requests to paths starting with `/api` are proxied to
 `http://localhost:8000`. This avoids CORS issues when running the backend and
 frontend separately.

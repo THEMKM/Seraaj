@@ -8,9 +8,13 @@ import OpportunityDetail from './pages/OpportunityDetail';
 import OrgDashboard from './pages/OrgDashboard';
 import OpportunityForm from './pages/OpportunityForm';
 import ApplicantReview from './pages/ApplicantReview';
+import SuperadminSettings from './pages/SuperadminSettings';
+import ThemeToggle from './components/ThemeToggle';
 
 export default function App() {
   return (
+    <>
+    <div className="fixed top-2 right-2 z-10"><ThemeToggle /></div>
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<Signup />} />
@@ -21,7 +25,9 @@ export default function App() {
       <Route path="/org/dashboard" element={<OrgDashboard />} />
       <Route path="/org/opportunity/new" element={<OpportunityForm />} />
       <Route path="/org/opportunity/:id/applicants" element={<ApplicantReview />} />
+      <Route path="/settings" element={<SuperadminSettings />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 }

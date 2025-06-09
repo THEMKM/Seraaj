@@ -1,5 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { motion } from 'framer-motion';
 
 export interface ModalProps {
   open: boolean;
@@ -24,12 +25,17 @@ export default function Modal({ open, onClose, children }: ModalProps) {
       aria-modal="true"
       role="dialog"
     >
-      <div className="bg-white p-4 rounded-2xl" onClick={(e) => e.stopPropagation()}>
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white p-4 rounded-2xl dark:bg-gray-800"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button className="float-right" aria-label="Close" onClick={onClose}>
           &times;
         </button>
         {children}
-      </div>
+      </motion.div>
     </div>,
     document.body
   );
