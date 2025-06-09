@@ -49,3 +49,10 @@ uvicorn app.main:app --reload
 cd ../frontend
 npm i
 npm run dev
+```
+
+## Environment variables
+
+Copy `.env.sample` to `.env` and adjust values.
+
+- `SECRET_KEY`: JWT signing key used by the backend. Defaults to `changeme` for development.
