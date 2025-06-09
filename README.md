@@ -22,7 +22,15 @@ Run backend tests:
 pytest
 ```
 
-The frontend folder currently contains a stub React setup.
+To run the frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend is built with Vite, React Router and Tailwind CSS.
 
 ### Environment variables
 

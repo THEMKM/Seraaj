@@ -46,7 +46,7 @@ PR → tick the checkbox*.
 - [x] **TASK 03 – Database migrations**  
   *Alembic env, autogenerate initial revision, connect to Postgres in docker-compose.*
 
-- [ ] **TASK 04 – Front-end skeleton**  
+- [x] **TASK 04 – Front-end skeleton**
   *Vite + Tailwind setup, React Router, Landing → /dashboard routes.*
 
 - [ ] **TASK 05 – Secure API proxy**  
