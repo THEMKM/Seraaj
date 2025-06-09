@@ -36,11 +36,11 @@ PR → tick the checkbox*.
 
 ## 📋 Task List (MVP)
 
-- [ ] **TASK 01 – Backend scaffold**  
+- [x] **TASK 01 – Backend scaffold**
   *Generate SQLModel classes + CRUD routers for User, VolunteerProfile, Organization,
   Opportunity, Application (per README §Data Model).*.
 
-- [ ] **TASK 02 – Auth & RBAC**  
+- [x] **TASK 02 – Auth & RBAC**
   *Integrate `fastapi-users`, issue JWTs, enforce role scopes.*
 
 - [ ] **TASK 03 – Database migrations**  

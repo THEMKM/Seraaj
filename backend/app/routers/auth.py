@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Optional
+import os
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from jose import JWTError, jwt
@@ -9,8 +10,10 @@ from sqlmodel import Session, select
 
 from ..db import get_session
 from ..models import User, UserRole
+from .dependencies import get_current_user
 
-SECRET_KEY = "secret"  # In production use env var
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -76,3 +79,8 @@ def login(credentials: UserLogin, session: Session = Depends(get_session)):
         raise HTTPException(status_code=400, detail="Invalid credentials")
     access_token = create_access_token({"sub": str(db_user.id), "role": db_user.role})
     return {"access_token": access_token}
+
+
+@router.get("/users/me", response_model=UserRead)
+def read_current_user(current_user: User = Depends(get_current_user)):
+    return UserRead(id=str(current_user.id), email=current_user.email, role=current_user.role)

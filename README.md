@@ -10,6 +10,7 @@ This repository contains the source code for **Seraaj**, a volunteer–organizat
 ### Quick start
 
 ```bash
+cp .env.sample .env  # adjust values as needed
 cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload
@@ -22,3 +23,7 @@ pytest
 ```
 
 The frontend folder currently contains a stub React setup.
+
+### Environment variables
+
+Copy `.env.sample` to `.env` and review values. At minimum, set `SECRET_KEY` for JWT signing.

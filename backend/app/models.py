@@ -36,9 +36,9 @@ class User(SQLModel, table=True):
 class VolunteerProfile(SQLModel, table=True):
     user_id: UUID = Field(foreign_key="user.id", primary_key=True)
     full_name: str
-    skills: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.String)))
-    interests: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.String)))
-    languages: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.String)))
+    skills: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.JSON))
+    interests: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.JSON))
+    languages: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.JSON))
     location_city: str | None
     location_country: str
     availability_hours: int
@@ -57,7 +57,7 @@ class Opportunity(SQLModel, table=True):
     org_id: UUID = Field(foreign_key="organization.id")
     title: str
     description: str
-    skills_required: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.String)))
+    skills_required: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.JSON))
     min_hours: int
     start_date: date
     end_date: date

@@ -7,7 +7,11 @@ from sqlmodel import Session
 
 from ..db import get_session
 from ..models import User, UserRole
-from ..routers.auth import SECRET_KEY, ALGORITHM
+from uuid import UUID
+import os
+
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
+ALGORITHM = "HS256"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
@@ -27,7 +31,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Dep
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    user = session.get(User, user_id)
+    user = session.get(User, UUID(user_id))
     if user is None:
         raise credentials_exception
     return user
