@@ -127,3 +127,17 @@ Use the demo credentials above to sign in as each role and explore the platform.
 The frontend includes a dark mode toggle in the top-right corner. Your choice is
 stored in `localStorage`. Superadmins can visit `/settings` to toggle feature
 flags and view basic system health.
+
+### Frontend (React)
+
+```bash
+cd frontend         # if you’re running outside docker
+npm install
+npm run dev         # Vite on :5173
+
+# run lint & e2e tests
+npm run lint
+npm run test:e2e
+```
+
+Design system: Tailwind CSS + shadcn/ui.  Icons: lucide-react.  Charts: recharts.
