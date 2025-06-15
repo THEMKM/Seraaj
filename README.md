@@ -10,26 +10,23 @@ This repository contains the source code for **Seraaj**, a volunteer–organizat
 ### Quick start
 
 ```bash
-cp .env.sample .env  # adjust values as needed
-docker-compose up -d && \
-  (cd backend && pip install -r requirements.txt && alembic upgrade head && python seed.py && uvicorn app.main:app --reload) & \
-  (cd frontend && npm install && npm run dev)
-```
-This installs dependencies, applies migrations, seeds demo data and starts both services.
+git clone https://github.com/<you>/seraaj.git && cd seraaj
 
-Run backend tests:
+# copy env template
+cp .env.example .env
 
-```bash
-pip install -r backend/requirements.txt
-pytest
-```
+# one-liner dev stack
+make dev
 
-To run the frontend:
+# open tabs
+open http://localhost:8000/docs        # FastAPI swagger
+open http://localhost:5173             # React (start via separate prompt)
 
-```bash
-cd frontend
-npm install
-npm run dev
+# seed demo data if not auto-seeded
+make seed
+
+# run all tests
+make test
 ```
 
 The frontend is built with Vite, React Router and Tailwind CSS.

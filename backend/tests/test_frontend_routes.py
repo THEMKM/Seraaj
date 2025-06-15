@@ -65,7 +65,7 @@ def test_my_apps_and_applicants():
     opp_id = opp.json()["id"]
 
     vol_h = _auth_header("vol3@example.com")
-    uid = client.get("/auth/users/me", headers=vol_h).json()["id"]
+    uid = client.get("/auth/me", headers=vol_h).json()["id"]
     client.put(
         "/volunteer/profile",
         json={

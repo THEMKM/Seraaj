@@ -5,6 +5,7 @@ from uuid import UUID, uuid4
 
 import enum
 import sqlalchemy
+from pgvector.sqlalchemy import Vector
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
 
@@ -42,6 +43,10 @@ class VolunteerProfile(SQLModel, table=True):
     location_city: str | None
     location_country: str
     availability_hours: int
+    embedding: list[float] | None = Field(
+        sa_column=sqlalchemy.Column(Vector(768), index=True, nullable=True),
+        default=None,
+    )
 
 
 class Organization(SQLModel, table=True):
@@ -57,6 +62,10 @@ class Opportunity(SQLModel, table=True):
     org_id: UUID = Field(foreign_key="organization.id")
     title: str
     description: str
+    embedding: list[float] | None = Field(
+        sa_column=sqlalchemy.Column(Vector(768), index=True, nullable=True),
+        default=None,
+    )
     skills_required: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.JSON))
     min_hours: int
     start_date: date

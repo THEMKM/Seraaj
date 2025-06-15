@@ -1,8 +1,9 @@
 fastapi
 uvicorn
 SQLModel
-python-jose[cryptography]
-passlib[bcrypt]
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+bcrypt==3.2.2          # pin: passlib 1.7.x expects __about__.__version__
 scikit-learn
 fastapi-users[sqlalchemy]==12.1.3
 email-validator
@@ -13,3 +14,7 @@ redis
 cloudinary
 faker
 pytest-cov
+psycopg2-binary>=2.9
+pgvector>=0.2.4
+sentence-transformers>=2.7
+python-dotenv>=1.0

@@ -17,7 +17,8 @@ def test_startup_does_not_drop_tables(monkeypatch):
         uid = user.id
 
     # simulate production startup
-    monkeypatch.setenv("ENV", "prod")
+    monkeypatch.setenv("APP_ENV", "prod")
+    monkeypatch.setenv("RESET_ON_START", "false")
     with TestClient(app):
         pass
 

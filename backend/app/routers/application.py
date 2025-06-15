@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, select
+from sqlmodel import Session, select, SQLModel
 from uuid import UUID
 
 from ..db import get_session
