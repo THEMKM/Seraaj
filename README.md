@@ -33,6 +33,10 @@ npm run dev
 
 The frontend is built with Vite, React Router and Tailwind CSS.
 
+### Authentication
+
+User registration and login are implemented via in-house JWT endpoints. Tokens are generated with `python-jose` and passwords are hashed using `passlib`. Each token encodes the user's role (`VOLUNTEER`, `ORG_ADMIN`, `SUPERADMIN`).
+
 ### Seeding demo data
 
 Install backend dependencies then run the seed script to populate the local database with sample data:
