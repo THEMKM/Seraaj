@@ -20,6 +20,7 @@ This installs dependencies, applies migrations, seeds demo data and starts both 
 Run backend tests:
 
 ```bash
+pip install -r backend/requirements.txt
 pytest
 ```
 
