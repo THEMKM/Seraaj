@@ -35,7 +35,7 @@ The frontend is built with Vite, React Router and Tailwind CSS.
 
 ### Authentication
 
-User registration and login are implemented via in-house JWT endpoints. Tokens are generated with `python-jose` and passwords are hashed using `passlib`. Each token encodes the user's role (`VOLUNTEER`, `ORG_ADMIN`, `SUPERADMIN`).
+User registration and login are handled by custom JWT endpoints exposed at `/auth/register` and `/auth/login`. A `/auth/users/me` endpoint returns the authenticated user. Tokens are generated with `python-jose`, passwords hashed with `passlib`, and each token encodes the user's role (`VOLUNTEER`, `ORG_ADMIN`, `SUPERADMIN`).
 
 ### Seeding demo data
 

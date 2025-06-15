@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, select
+from fastapi import APIRouter, Depends
+from sqlmodel import Session
 
 from ..db import get_session
 from ..models import VolunteerProfile
@@ -15,14 +15,16 @@ def upsert_profile(
     session: Session = Depends(get_session),
     user=Depends(require_role("VOLUNTEER")),
 ) -> VolunteerProfile:
-    profile.user_id = UUID(str(profile.user_id))
+    profile.user_id = user.id
     existing = session.get(VolunteerProfile, profile.user_id)
     if existing:
-        for field, value in profile.dict(exclude_unset=True).items():
+        for field, value in profile.dict(exclude_unset=True, exclude={"user_id"}).items():
             setattr(existing, field, value)
         session.add(existing)
-    else:
-        session.add(profile)
+        session.commit()
+        session.refresh(existing)
+        return existing
+    session.add(profile)
     session.commit()
-    session.refresh(profile if not existing else existing)
-    return profile if not existing else existing
+    session.refresh(profile)
+    return profile
