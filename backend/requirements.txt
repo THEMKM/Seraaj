@@ -1,0 +1,2 @@
+fastapi
+httpx<0.26
