@@ -1,9 +1,13 @@
 from __future__ import with_statement
 import os
+import sys
+from pathlib import Path
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 from alembic import context
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from app.models import SQLModel
 from app.db import engine as target_engine
