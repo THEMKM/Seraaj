@@ -5,7 +5,6 @@ from app.routers.auth import get_password_hash
 
 from app.db import engine, init_db
 from app.models import User, UserRole, VolunteerProfile, Organization, Opportunity, Application, OpportunityStatus, ApplicationStatus
-from uuid import uuid4
 from random import sample, randint, choice
 
 fake = Faker()
@@ -80,7 +79,7 @@ def create_orgs(
             name=fake.company(),
             description=fake.bs(),
             website=fake.url(),
-            owner_id=owner.id,
+            owner_id=admin.id,
         )
         session.add(org)
         orgs.append(org)

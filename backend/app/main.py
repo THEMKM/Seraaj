@@ -8,6 +8,7 @@ from .routers import (
     organization,
     opportunity,
     application,
+    application_extra,
     recognition,
     settings,
 )
@@ -19,6 +20,7 @@ app.include_router(volunteer)
 app.include_router(organization)
 app.include_router(opportunity)
 app.include_router(application)
+app.include_router(application_extra)
 app.include_router(recognition)
 app.include_router(settings)
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from uuid import UUID
 
@@ -12,6 +12,18 @@ from datetime import date
 from .dependencies import require_role
 
 router = APIRouter(prefix="/opportunity", tags=["opportunity"])
+
+
+@router.get("/{opp_id}", response_model=Opportunity)
+def get_opportunity(
+    opp_id: str,
+    session: Session = Depends(get_session),
+) -> Opportunity:
+    """Return a single opportunity."""
+    opp = session.get(Opportunity, UUID(opp_id))
+    if not opp:
+        raise HTTPException(status_code=404, detail="Opportunity not found")
+    return opp
 
 
 class OpportunityCreate(SQLModel):
