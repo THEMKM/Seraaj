@@ -15,6 +15,7 @@ docker-compose up -d && \
   (cd backend && pip install -r requirements.txt && alembic upgrade head && python seed.py && uvicorn app.main:app --reload) & \
   (cd frontend && npm install && npm run dev)
 ```
+This installs dependencies, applies migrations, seeds demo data and starts both services.
 
 Run backend tests:
 
@@ -34,9 +35,10 @@ The frontend is built with Vite, React Router and Tailwind CSS.
 
 ### Seeding demo data
 
-Run the seed script to populate the local database with sample data:
+Install backend dependencies then run the seed script to populate the local database with sample data:
 
 ```bash
+pip install -r backend/requirements.txt
 python backend/seed.py
 ```
 

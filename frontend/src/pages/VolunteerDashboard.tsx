@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import ProfileCompletionMeter from "../components/ProfileCompletionMeter";
 import OpportunityCard from "../components/OpportunityCard";
 import DataTable from "../components/DataTable";
+import { authFetch } from "../api";
 
 interface ApplicationRow {
   id: string;
@@ -21,7 +22,7 @@ export default function VolunteerDashboard() {
   const { data: opps = [] } = useQuery<OppRow[]>({
     queryKey: ["opps"],
     queryFn: async () => {
-      const res = await fetch("/api/opportunity/search?match_me=true");
+      const res = await authFetch("/api/opportunity/search?match_me=true");
       if (!res.ok) return [] as OppRow[];
       return res.json();
     },
@@ -31,7 +32,7 @@ export default function VolunteerDashboard() {
   const { data: apps = [] } = useQuery<ApplicationRow[]>({
     queryKey: ["apps"],
     queryFn: async () => {
-      const res = await fetch("/api/applications/me");
+      const res = await authFetch("/api/applications/me");
       if (!res.ok) return [] as ApplicationRow[];
       return res.json();
     },

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { authFetch } from '../api';
 
 interface Flags {
   alg_v2: boolean;
@@ -18,12 +19,12 @@ export default function SuperadminSettings() {
   const [health, setHealth] = useState<Health | null>(null);
 
   const fetchFlags = async () => {
-    const res = await fetch('/api/settings/flags');
+    const res = await authFetch('/api/settings/flags');
     if (res.ok) setFlags(await res.json());
   };
 
   const fetchHealth = async () => {
-    const res = await fetch('/api/settings/health');
+    const res = await authFetch('/api/settings/health');
     if (res.ok) setHealth(await res.json());
   };
 
@@ -33,7 +34,7 @@ export default function SuperadminSettings() {
   }, []);
 
   const toggle = async (flag: keyof Flags) => {
-    const res = await fetch(`/api/settings/flags/${flag}`, { method: 'POST' });
+    const res = await authFetch(`/api/settings/flags/${flag}`, { method: 'POST' });
     if (res.ok) fetchFlags();
   };
 

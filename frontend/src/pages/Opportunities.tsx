@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import OpportunityCard from "../components/OpportunityCard";
+import { authFetch } from "../api";
 
 export default function Opportunities() {
   const [keywords, setKeywords] = useState("");
@@ -14,7 +15,7 @@ export default function Opportunities() {
     queryKey: ["search", keywords],
     queryFn: async () => {
       const params = new URLSearchParams({ q: keywords });
-      const res = await fetch(`/api/opportunity/search?${params.toString()}`);
+      const res = await authFetch(`/api/opportunity/search?${params.toString()}`);
       if (!res.ok) return [] as Result[];
       return res.json();
     },

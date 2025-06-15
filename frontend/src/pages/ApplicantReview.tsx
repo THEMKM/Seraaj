@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import DataTable from "../components/DataTable";
 import Modal from "../components/Modal";
 import { useState } from "react";
+import { authFetch } from "../api";
 
 interface ApplicantRow {
   id: string;
@@ -16,7 +17,7 @@ export default function ApplicantReview() {
   const { data: applicants = [] } = useQuery<ApplicantRow[]>({
     queryKey: ["apps"],
     queryFn: async () => {
-      const res = await fetch("/api/applicants");
+      const res = await authFetch("/api/applicants");
       if (!res.ok) return [] as ApplicantRow[];
       return res.json();
     },
