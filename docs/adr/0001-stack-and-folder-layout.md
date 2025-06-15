@@ -8,7 +8,7 @@ The Seraaj project needs a clear technology stack and directory structure so con
 
 ## Decision
 - **Backend** uses **FastAPI 0.110** with **SQLModel** for ORM, served by **Uvicorn**. Database migrations run via **Alembic** against **Postgres**.
-- **Authentication** relies on **fastapi-users** issuing JWT tokens with role-based scopes (`VOLUNTEER`, `ORG_ADMIN`, `SUPERADMIN`).
+- **Authentication** is handled in-house using **python-jose** to issue JWT tokens. Passwords are hashed with **passlib**, and tokens encode the user role (`VOLUNTEER`, `ORG_ADMIN`, `SUPERADMIN`).
 - **Matching** jobs run with **Celery** and **Redis**.
 - **Frontend** is a **React 18** application bootstrapped with **Vite** and styled using **Tailwind CSS**. State is managed through **TanStack Query**.
 - **Repository layout**

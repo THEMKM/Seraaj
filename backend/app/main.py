@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import os
 
 from .db import init_db
 from .routers import (
@@ -26,7 +27,8 @@ app.include_router(settings)
 
 @app.on_event("startup")
 def on_startup():
-    init_db()
+    if os.getenv("ENV") == "dev":
+        init_db()
 
 
 @app.get("/")

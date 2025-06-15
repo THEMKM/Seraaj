@@ -33,6 +33,10 @@ npm run dev
 
 The frontend is built with Vite, React Router and Tailwind CSS.
 
+### Authentication
+
+User registration and login are implemented via in-house JWT endpoints. Tokens are generated with `python-jose` and passwords are hashed using `passlib`. Each token encodes the user's role (`VOLUNTEER`, `ORG_ADMIN`, `SUPERADMIN`).
+
 ### Seeding demo data
 
 Install backend dependencies then run the seed script to populate the local database with sample data:
@@ -41,6 +45,10 @@ Install backend dependencies then run the seed script to populate the local data
 pip install -r backend/requirements.txt
 python backend/seed.py
 ```
+
+The application no longer drops tables automatically on startup. To reset the
+database during development you can either run the seed script above or start
+the server with `ENV=dev` which calls `init_db()` on launch.
 
 The seed script creates one account for each user role with password `pass123`:
 
