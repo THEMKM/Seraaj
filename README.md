@@ -11,9 +11,9 @@ This repository contains the source code for **Seraaj**, a volunteer–organizat
 
 ```bash
 cp .env.sample .env  # adjust values as needed
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+docker-compose up -d && \
+  (cd backend && pip install -r requirements.txt && alembic upgrade head && python seed.py && uvicorn app.main:app --reload) & \
+  (cd frontend && npm install && npm run dev)
 ```
 
 Run backend tests:
@@ -39,6 +39,12 @@ Run the seed script to populate the local database with sample data:
 ```bash
 python backend/seed.py
 ```
+
+The seed script creates one account for each user role with password `pass123`:
+
+- Volunteer – `volunteer@example.com`
+- Organization admin – `orgadmin@example.com`
+- Superadmin – `superadmin@example.com`
 
 ### Environment variables
 
@@ -88,27 +94,27 @@ You can try the full stack locally using Docker Compose for Postgres and Redis.
 docker-compose up -d  # starts `db` and `redis` services
 ```
 
-Apply migrations and seed demo data:
+Apply migrations and seed demo data manually if you prefer running the services separately:
 
 ```bash
 cd backend
 alembic upgrade head
-python seed.py  # optional sample data
-```
-
-Start the backend and frontend in separate terminals:
-
-```bash
+python seed.py
 uvicorn app.main:app --reload
 ```
 
+In another terminal:
+
 ```bash
-cd ../frontend
+cd frontend
+npm install
 npm run dev
 ```
 
 The API is now available at `http://localhost:8000/docs` and the web app at
 `http://localhost:5173`.
+
+Use the demo credentials above to sign in as each role and explore the platform.
 
 The frontend includes a dark mode toggle in the top-right corner. Your choice is
 stored in `localStorage`. Superadmins can visit `/settings` to toggle feature
