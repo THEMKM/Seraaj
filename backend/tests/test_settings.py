@@ -1,5 +1,4 @@
 from fastapi.testclient import TestClient
-from fastapi.testclient import TestClient
 from app.main import app
 from app.db import init_db
 
