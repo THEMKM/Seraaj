@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import OpportunityCard from "../components/OpportunityCard";
+import { authFetch } from "../api";
 
 export default function OpportunityDetail() {
   const { id } = useParams();
@@ -15,7 +16,7 @@ export default function OpportunityDetail() {
   const { data } = useQuery<OppDetail | null>({
     queryKey: ["opp", id],
     queryFn: async () => {
-      const res = await fetch(`/api/opportunity/${id}`);
+      const res = await authFetch(`/api/opportunity/${id}`);
       if (!res.ok) return null;
       return res.json();
     },

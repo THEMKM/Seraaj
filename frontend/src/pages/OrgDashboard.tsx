@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import DataTable from "../components/DataTable";
+import { authFetch } from "../api";
 
 interface OppRow {
   id: string;
@@ -12,7 +13,7 @@ export default function OrgDashboard() {
   const { data: opps = [] } = useQuery<OppRow[]>({
     queryKey: ["orgOpps"],
     queryFn: async () => {
-      const res = await fetch("/api/org/opportunities");
+      const res = await authFetch("/api/org/opportunities");
       if (!res.ok) return [] as OppRow[];
       return res.json();
     },
