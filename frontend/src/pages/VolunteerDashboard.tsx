@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import ProfileCompletionMeter from "../components/ProfileCompletionMeter";
 import OpportunityCard from "../components/OpportunityCard";
 import DataTable from "../components/DataTable";
@@ -13,6 +14,7 @@ interface ApplicationRow {
 }
 
 export default function VolunteerDashboard() {
+  const navigate = useNavigate();
   interface OppRow {
     id: string;
     title: string;
@@ -23,6 +25,11 @@ export default function VolunteerDashboard() {
     queryKey: ["opps"],
     queryFn: async () => {
       const res = await authFetch("/api/opportunity/search?match_me=true");
+      if (res.status === 401) {
+        localStorage.removeItem('token');
+        navigate('/login');
+        return [] as OppRow[];
+      }
       if (!res.ok) return [] as OppRow[];
       return res.json();
     },
@@ -33,6 +40,11 @@ export default function VolunteerDashboard() {
     queryKey: ["apps"],
     queryFn: async () => {
       const res = await authFetch("/api/applications/me");
+      if (res.status === 401) {
+        localStorage.removeItem('token');
+        navigate('/login');
+        return [] as ApplicationRow[];
+      }
       if (!res.ok) return [] as ApplicationRow[];
       return res.json();
     },

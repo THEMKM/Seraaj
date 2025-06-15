@@ -10,6 +10,7 @@ import OpportunityForm from './pages/OpportunityForm';
 import ApplicantReview from './pages/ApplicantReview';
 import SuperadminSettings from './pages/SuperadminSettings';
 import ThemeToggle from './components/ThemeToggle';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
   return (
@@ -19,13 +20,13 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/dashboard" element={<VolunteerDashboard />} />
-      <Route path="/opportunities" element={<Opportunities />} />
-      <Route path="/opportunity/:id" element={<OpportunityDetail />} />
-      <Route path="/org/dashboard" element={<OrgDashboard />} />
-      <Route path="/org/opportunity/new" element={<OpportunityForm />} />
-      <Route path="/org/opportunity/:id/applicants" element={<ApplicantReview />} />
-      <Route path="/settings" element={<SuperadminSettings />} />
+      <Route path="/dashboard" element={<ProtectedRoute><VolunteerDashboard /></ProtectedRoute>} />
+      <Route path="/opportunities" element={<ProtectedRoute><Opportunities /></ProtectedRoute>} />
+      <Route path="/opportunity/:id" element={<ProtectedRoute><OpportunityDetail /></ProtectedRoute>} />
+      <Route path="/org/dashboard" element={<ProtectedRoute><OrgDashboard /></ProtectedRoute>} />
+      <Route path="/org/opportunity/new" element={<ProtectedRoute><OpportunityForm /></ProtectedRoute>} />
+      <Route path="/org/opportunity/:id/applicants" element={<ProtectedRoute><ApplicantReview /></ProtectedRoute>} />
+      <Route path="/settings" element={<ProtectedRoute><SuperadminSettings /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
     </>

@@ -8,14 +8,26 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !password) {
       setError('Email and password required');
       return;
     }
-    // stub success
-    navigate('/dashboard');
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || 'Signup failed');
+      }
+      navigate('/login');
+    } catch (err: any) {
+      setError(err.message);
+    }
   }
 
   return (
@@ -47,7 +59,8 @@ export default function Signup() {
         <button type="submit" className="mt-2 w-full rounded-2xl bg-brand px-4 py-2 text-white">
           Create Account
         </button>
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </form>
-    </main>
+      </main>
   );
 }
