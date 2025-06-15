@@ -1,6 +1,8 @@
 from faker import Faker
 from sqlmodel import Session
 
+from app.routers.auth import get_password_hash
+
 from app.db import engine, init_db
 from app.models import User, UserRole, VolunteerProfile, Organization, Opportunity, Application, OpportunityStatus, ApplicationStatus
 from uuid import uuid4
@@ -11,12 +13,29 @@ fake = Faker()
 SKILLS = ["python", "javascript", "excel", "design", "marketing", "writing"]
 
 
+def create_demo_accounts(session: Session) -> None:
+    """Create predefined accounts for each user role."""
+    demo_users = [
+        ("volunteer@example.com", UserRole.VOLUNTEER),
+        ("orgadmin@example.com", UserRole.ORG_ADMIN),
+        ("superadmin@example.com", UserRole.SUPERADMIN),
+    ]
+    for email, role in demo_users:
+        user = User(
+            email=email,
+            hashed_password=get_password_hash("pass123"),
+            role=role,
+        )
+        session.add(user)
+    session.commit()
+
+
 def create_users(session: Session, count: int = 500) -> list[User]:
     users = []
     for _ in range(count):
         user = User(
             email=fake.unique.email(),
-            hashed_password="seed",  # not secure
+            hashed_password=get_password_hash("seed"),
             role=UserRole.VOLUNTEER,
         )
         session.add(user)
@@ -99,6 +118,7 @@ def create_applications(session: Session, users: list[User], opps: list[Opportun
 def seed():
     init_db()
     with Session(engine) as session:
+        create_demo_accounts(session)
         users = create_users(session)
         create_profiles(session, users)
         orgs = create_orgs(session)

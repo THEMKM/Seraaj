@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FormField from '../components/FormField';
+import { login as apiLogin } from '../api';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -8,13 +9,18 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !password) {
       setError('Email and password required');
       return;
     }
-    navigate('/dashboard');
+    try {
+      await apiLogin(email, password);
+      navigate('/dashboard');
+    } catch {
+      setError('Invalid credentials');
+    }
   }
 
   return (
@@ -45,6 +51,7 @@ export default function Login() {
         <button type="submit" className="mt-2 w-full rounded-2xl bg-brand px-4 py-2 text-white">
           Log In
         </button>
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </form>
     </main>
   );
