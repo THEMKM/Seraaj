@@ -7,12 +7,11 @@ export default {
     extend: {
       colors: {
         brand: {
-          DEFAULT: '#0f766e',
-          light: '#2dd4bf',
-          dark: '#0d9488',
+          DEFAULT: '#087ea4',
+          dark: '#046494',
         },
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 } satisfies Config;
