@@ -42,6 +42,10 @@ pip install -r backend/requirements.txt
 python backend/seed.py
 ```
 
+The application no longer drops tables automatically on startup. To reset the
+database during development you can either run the seed script above or start
+the server with `ENV=dev` which calls `init_db()` on launch.
+
 The seed script creates one account for each user role with password `pass123`:
 
 - Volunteer – `volunteer@example.com`
