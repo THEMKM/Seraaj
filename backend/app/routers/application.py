@@ -6,8 +6,13 @@ from sqlmodel import Session, select
 from uuid import UUID
 
 from ..db import get_session
-from ..models import Application, ApplicationStatus, Opportunity, Organization
-from sqlmodel import SQLModel
+from ..models import (
+    Application,
+    ApplicationStatus,
+    Opportunity,
+    OpportunityStatus,
+    Organization,
+)
 from .dependencies import require_role
 
 
@@ -28,7 +33,8 @@ def apply(
     session: Session = Depends(get_session),
     user=Depends(require_role("VOLUNTEER")),
 ) -> Application:
-    if not session.get(Opportunity, UUID(opp_id)):
+    opp = session.get(Opportunity, UUID(opp_id))
+    if not opp:
         raise HTTPException(status_code=404, detail="Opportunity not found")
 
     duplicate = session.exec(

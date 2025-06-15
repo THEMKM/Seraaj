@@ -54,6 +54,29 @@ def test_update_status_and_list_apps():
     assert len(apps.json()) == 1
 
 
+def test_apply_closed_opportunity():
+    """Applying to a CLOSED opportunity should fail."""
+    org_h = _auth_header("orgclosed@example.com", role="ORG_ADMIN")
+    org = client.post("/org", json={"name": "OC", "description": "d"}, headers=org_h)
+    org_id = org.json()["id"]
+    closed_opp = client.post(
+        f"/opportunity/org/{org_id}",
+        json={
+            "title": "T3",
+            "description": "d",
+            "skills_required": ["x"],
+            "min_hours": 1,
+            "start_date": "2025-01-01",
+            "end_date": "2025-01-02",
+            "is_remote": True,
+            "status": "CLOSED",
+        },
+        headers=org_h,
+    )
+    opp_id = closed_opp.json()["id"]
+
+    vol_h = _auth_header("volclosed@example.com")
+    uid = client.get("/auth/users/me", headers=vol_h).json()["id"]
 def test_duplicate_application_rejected():
     org_headers = _auth_header("org3@example.com", role="ORG_ADMIN")
     org = client.post("/org", json={"name": "O3", "description": "d"}, headers=org_headers)
