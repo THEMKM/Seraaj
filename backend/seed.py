@@ -4,7 +4,17 @@ from sqlmodel import Session, select
 from app.routers.auth import get_password_hash
 
 from app.db import engine, init_db
-from app.models import User, UserRole, VolunteerProfile, Organization, Opportunity, Application, OpportunityStatus, ApplicationStatus
+from app.models import (
+    User,
+    UserRole,
+    VolunteerProfile,
+    Organization,
+    Opportunity,
+    Application,
+    OpportunityStatus,
+    ApplicationStatus,
+)
+from app.services.embedding import embed
 from random import sample, randint, choice
 
 fake = Faker()
@@ -57,6 +67,7 @@ def create_profiles(session: Session, users: list[User]):
             location_country=fake.country(),
             availability_hours=randint(1, 10),
         )
+        profile.embedding = embed(" ".join(profile.skills or []))
         session.add(profile)
     session.commit()
 
@@ -105,6 +116,7 @@ def create_opportunities(session: Session, orgs: list[Organization], count: int 
             is_remote=True,
             status=OpportunityStatus.OPEN,
         )
+        opp.embedding = embed(opp.description)
         session.add(opp)
         opps.append(opp)
     session.commit()
@@ -126,7 +138,7 @@ def create_applications(session: Session, users: list[User], opps: list[Opportun
     session.commit()
 
 
-def seed():
+def seed_demo_data():
     init_db()
     with Session(engine) as session:
         create_demo_accounts(session)
@@ -139,5 +151,8 @@ def seed():
     print("Seed complete")
 
 
+seed = seed_demo_data  # backwards compatibility
+
+
 if __name__ == "__main__":
-    seed()
+    seed_demo_data()

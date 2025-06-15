@@ -24,7 +24,7 @@ def test_auth_register_login_and_me():
     assert login.status_code == 200
     token = login.json()["access_token"]
 
-    me = client.get("/auth/users/me", headers={"Authorization": f"Bearer {token}"})
+    me = client.get("/auth/me", headers={"Authorization": f"Bearer {token}"})
     assert me.status_code == 200
     assert me.json()["email"] == "a@example.com"
 
@@ -74,7 +74,7 @@ def test_full_flow():
     profile = client.put(
         "/volunteer/profile",
         json={
-            "user_id": client.get("/auth/users/me", headers=vheaders).json()["id"],
+            "user_id": client.get("/auth/me", headers=vheaders).json()["id"],
             "full_name": "Vol Name",
             "skills": ["python"],
             "interests": ["design"],

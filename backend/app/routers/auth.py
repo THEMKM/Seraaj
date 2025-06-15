@@ -12,10 +12,13 @@ from ..db import get_session
 from ..models import User, UserRole
 from .dependencies import get_current_user
 
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
+from ..config import get_settings
+
+settings = get_settings()
+SECRET_KEY = settings.SECRET_KEY
 
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -69,7 +72,7 @@ def register(user: UserCreate, session: Session = Depends(get_session)):
     session.commit()
     session.refresh(db_user)
     access_token = create_access_token({"sub": str(db_user.id), "role": db_user.role})
-    return {"access_token": access_token}
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.post("/login", response_model=Token)
@@ -78,9 +81,10 @@ def login(credentials: UserLogin, session: Session = Depends(get_session)):
     if not db_user or not verify_password(credentials.password, db_user.hashed_password):
         raise HTTPException(status_code=400, detail="Invalid credentials")
     access_token = create_access_token({"sub": str(db_user.id), "role": db_user.role})
-    return {"access_token": access_token}
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/users/me", response_model=UserRead)
-def read_current_user(current_user: User = Depends(get_current_user)):
-    return UserRead(id=str(current_user.id), email=current_user.email, role=current_user.role)
+@router.get("/me", response_model=UserRead)
+def read_me(current=Depends(get_current_user)):
+    """Return the currently authenticated user."""
+    return current

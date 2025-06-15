@@ -1,11 +1,21 @@
 from sqlmodel import SQLModel, create_engine, Session
-import os
+from sqlalchemy import event
+from pgvector.sqlalchemy import Vector
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./seraaj.db")
+from .config import get_settings
 
-connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+settings = get_settings()
+connect_args = {
+    "check_same_thread": False
+} if settings.DATABASE_URL.startswith("sqlite") else {}
+engine = create_engine(
+    settings.DATABASE_URL, echo=False, pool_pre_ping=True, connect_args=connect_args
+)
 
-engine = create_engine(DATABASE_URL, echo=True, connect_args=connect_args)
+# ensure pgvector extension exists (Postgres only)
+if engine.url.get_backend_name() == "postgresql":
+    with engine.begin() as conn:
+        conn.exec_driver_sql("CREATE EXTENSION IF NOT EXISTS vector")
 
 
 def init_db() -> None:

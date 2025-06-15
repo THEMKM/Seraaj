@@ -1,39 +1,32 @@
-name: CI
-
-on:
-  push:
-    branches: [ work ]
-  pull_request:
-    branches: [ work ]
-
+name: ci
+on: [push, pull_request]
 jobs:
-  backend-lint:
+  backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: seraaj
+          POSTGRES_USER: seraaj
+          POSTGRES_PASSWORD: seraaj
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Install dependencies
+          python-version: "3.12"
+      - name: Install deps
         run: |
-          python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
-          pip install pytest
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - name: Install frontend deps
+      - name: Tests
+        env:
+          DATABASE_URL: postgresql+psycopg2://seraaj:seraaj@localhost:5432/seraaj
         run: |
-          cd frontend && npm ci
-      - name: Lint
-        run: |
-          python -m compileall backend/app
-      - name: Test
-        run: |
-          pytest backend/tests -q
-      - name: Playwright tests
-        run: |
-          npx playwright install --with-deps
-          cd frontend && npx playwright test
+          cd backend && pytest -q

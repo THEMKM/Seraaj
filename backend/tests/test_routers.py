@@ -30,7 +30,7 @@ def test_update_status_and_list_apps():
     profile = client.put(
         "/volunteer/profile",
         json={
-            "user_id": client.get("/auth/users/me", headers=vol_headers).json()["id"],
+            "user_id": client.get("/auth/me", headers=vol_headers).json()["id"],
             "full_name": "Name",
             "skills": ["x"],
             "interests": [],
@@ -76,7 +76,7 @@ def test_apply_closed_opportunity():
     opp_id = closed_opp.json()["id"]
 
     vol_h = _auth_header("volclosed@example.com")
-    uid = client.get("/auth/users/me", headers=vol_h).json()["id"]
+    uid = client.get("/auth/me", headers=vol_h).json()["id"]
 def test_duplicate_application_rejected():
     org_headers = _auth_header("org3@example.com", role="ORG_ADMIN")
     org = client.post("/org", json={"name": "O3", "description": "d"}, headers=org_headers)
@@ -89,7 +89,7 @@ def test_duplicate_application_rejected():
     )
     opp_id = opp.json()["id"]
     vol_headers = _auth_header("v3@example.com")
-    uid = client.get("/auth/users/me", headers=vol_headers).json()["id"]
+    uid = client.get("/auth/me", headers=vol_headers).json()["id"]
     client.put(
         "/volunteer/profile",
         json={

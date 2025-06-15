@@ -5,6 +5,7 @@ from .opportunity import router as opportunity
 from .application import router as application, extra_router as application_extra
 from .recognition import router as recognition
 from .settings import router as settings
+from .match import router as match_router
 
 __all__ = [
     "auth",
@@ -15,4 +16,5 @@ __all__ = [
     "application_extra",
     "recognition",
     "settings",
+    "match_router",
 ]
