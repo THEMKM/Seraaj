@@ -79,7 +79,7 @@ def create_orgs(
             name=fake.company(),
             description=fake.bs(),
             website=fake.url(),
-            owner_id=admin.id,
+            owner_id=owner.id,
         )
         session.add(org)
         orgs.append(org)

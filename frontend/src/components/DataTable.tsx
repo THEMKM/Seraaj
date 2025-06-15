@@ -28,7 +28,7 @@ export default function DataTable<T extends { id: string | number }>({ columns, 
           <tr key={row.id} className="hover:bg-gray-50">
             {columns.map((col) => (
               <td key={String(col.key)} className="px-4 py-2">
-                {col.render ? col.render(row) : (row as any)[col.key as keyof T]}
+                {col.render ? col.render(row) : String(row[col.key as keyof T])}
               </td>
             ))}
           </tr>
