@@ -7,7 +7,14 @@ from uuid import UUID
 
 from ..db import get_session
 from ..models import Application, ApplicationStatus, Opportunity, Organization
+from sqlmodel import SQLModel
 from .dependencies import require_role
+
+
+class ApplicationCreate(SQLModel):
+    """Allowed fields when applying to an opportunity."""
+
+    status: ApplicationStatus = ApplicationStatus.PENDING
 
 router = APIRouter(prefix="/application", tags=["application"])
 # Additional router for paths not under /application prefix
@@ -17,14 +24,18 @@ extra_router = APIRouter(tags=["application"])
 @router.post("/{opp_id}/apply", response_model=Application)
 def apply(
     opp_id: str,
-    application: Application,
+    application_in: ApplicationCreate,
     session: Session = Depends(get_session),
     user=Depends(require_role("VOLUNTEER")),
 ) -> Application:
     if not session.get(Opportunity, UUID(opp_id)):
         raise HTTPException(status_code=404, detail="Opportunity not found")
-    application.opportunity_id = UUID(opp_id)
-    application.volunteer_id = user.id
+
+    application = Application(
+        **application_in.model_dump(),
+        opportunity_id=UUID(opp_id),
+        volunteer_id=user.id,
+    )
     session.add(application)
     session.commit()
     session.refresh(application)

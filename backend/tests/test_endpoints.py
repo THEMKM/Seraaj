@@ -90,7 +90,7 @@ def test_full_flow():
     # apply
     application = client.post(
         f"/application/{opp_id}/apply",
-        json={"volunteer_id": profile.json()["user_id"], "opportunity_id": opp_id, "status": "PENDING"},
+        json={},
         headers=vheaders,
     )
     assert application.status_code == 200
