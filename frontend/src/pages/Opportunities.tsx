@@ -37,7 +37,7 @@ export default function Opportunities() {
         <p>No matches—try broadening your skills filter.</p>
       ) : (
         <div className="grid gap-4 md:grid-cols-3">
-          {results.map((o: any) => (
+          {results.map((o: Result) => (
             <OpportunityCard key={o.id} title={o.title} orgName={o.orgName} />
           ))}
         </div>

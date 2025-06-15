@@ -6,7 +6,7 @@ from sqlmodel import Session, select
 from uuid import UUID
 
 from ..db import get_session
-from ..models import Opportunity, OpportunityStatus
+from ..models import Opportunity, OpportunityStatus, Organization
 from sqlmodel import SQLModel
 from datetime import date
 from .dependencies import require_role
@@ -45,7 +45,12 @@ def create_opportunity(
     user=Depends(require_role("ORG_ADMIN")),
 ) -> Opportunity:
     """Create an opportunity for the given organization."""
-    opp = Opportunity(**opp_in.model_dump(), org_id=UUID(org_id))
+    org = session.get(Organization, UUID(org_id))
+    if not org:
+        raise HTTPException(status_code=404, detail="Organization not found")
+    if org.owner_id != user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    opp = Opportunity(**opp_in.model_dump(), org_id=org.id)
     session.add(opp)
     session.commit()
     session.refresh(opp)

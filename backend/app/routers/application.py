@@ -21,8 +21,10 @@ def apply(
     session: Session = Depends(get_session),
     user=Depends(require_role("VOLUNTEER")),
 ) -> Application:
+    if not session.get(Opportunity, UUID(opp_id)):
+        raise HTTPException(status_code=404, detail="Opportunity not found")
     application.opportunity_id = UUID(opp_id)
-    application.volunteer_id = UUID(str(application.volunteer_id))
+    application.volunteer_id = user.id
     session.add(application)
     session.commit()
     session.refresh(application)
@@ -35,9 +37,15 @@ def list_applications(
     session: Session = Depends(get_session),
     user=Depends(require_role("ORG_ADMIN")),
 ) -> List[Application]:
-    from ..models import Opportunity
+    org = session.get(Organization, UUID(org_id))
+    if not org:
+        raise HTTPException(status_code=404, detail="Organization not found")
+    if org.owner_id != user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
     return session.exec(
-        select(Application).join(Opportunity).where(Opportunity.org_id == UUID(org_id))
+        select(Application)
+        .join(Opportunity)
+        .where(Opportunity.org_id == org.id)
     ).all()
 
 
@@ -51,6 +59,12 @@ def update_status(
     application = session.get(Application, UUID(app_id))
     if not application:
         raise HTTPException(status_code=404, detail="Application not found")
+    opp = session.get(Opportunity, application.opportunity_id)
+    if not opp:
+        raise HTTPException(status_code=404, detail="Opportunity not found")
+    org = session.get(Organization, opp.org_id)
+    if not org or org.owner_id != user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
     application.status = status
     session.add(application)
     session.commit()
