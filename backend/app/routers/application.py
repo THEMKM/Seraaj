@@ -6,10 +6,12 @@ from sqlmodel import Session, select
 from uuid import UUID
 
 from ..db import get_session
-from ..models import Application, ApplicationStatus
+from ..models import Application, ApplicationStatus, Opportunity, Organization
 from .dependencies import require_role
 
 router = APIRouter(prefix="/application", tags=["application"])
+# Additional router for paths not under /application prefix
+extra_router = APIRouter(tags=["application"])
 
 
 @router.post("/{opp_id}/apply", response_model=Application)
@@ -54,3 +56,34 @@ def update_status(
     session.commit()
     session.refresh(application)
     return application
+
+
+# --- Extra frontend convenience endpoints ---
+
+@extra_router.get("/applications/me", response_model=List[Application])
+def my_applications(
+    session: Session = Depends(get_session),
+    user=Depends(require_role("VOLUNTEER")),
+) -> List[Application]:
+    """Return applications submitted by the authenticated volunteer."""
+    return session.exec(
+        select(Application).where(Application.volunteer_id == user.id)
+    ).all()
+
+
+@extra_router.get("/applicants", response_model=List[Application])
+def list_applicants(
+    session: Session = Depends(get_session),
+    user=Depends(require_role("ORG_ADMIN")),
+) -> List[Application]:
+    """List applications for opportunities owned by the authenticated org admin."""
+    org_ids = session.exec(
+        select(Organization.id).where(Organization.owner_id == user.id)
+    ).all()
+    if not org_ids:
+        return []
+    return session.exec(
+        select(Application)
+        .join(Opportunity)
+        .where(Opportunity.org_id.in_(org_ids))
+    ).all()

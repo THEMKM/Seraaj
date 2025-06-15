@@ -5,7 +5,6 @@ from app.routers.auth import get_password_hash
 
 from app.db import engine, init_db
 from app.models import User, UserRole, VolunteerProfile, Organization, Opportunity, Application, OpportunityStatus, ApplicationStatus
-from uuid import uuid4
 from random import sample, randint, choice
 
 fake = Faker()
@@ -63,13 +62,22 @@ def create_profiles(session: Session, users: list[User]):
 
 
 def create_orgs(session: Session, count: int = 20) -> list[Organization]:
+    """Create organizations each with their own admin user."""
     orgs = []
     for _ in range(count):
+        admin = User(
+            email=fake.unique.company_email(),
+            hashed_password=get_password_hash("seed"),
+            role=UserRole.ORG_ADMIN,
+        )
+        session.add(admin)
+        session.commit()
+        session.refresh(admin)
         org = Organization(
             name=fake.company(),
             description=fake.bs(),
             website=fake.url(),
-            owner_id=uuid4(),  # placeholder
+            owner_id=admin.id,
         )
         session.add(org)
         orgs.append(org)
