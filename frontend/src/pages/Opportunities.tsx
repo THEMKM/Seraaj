@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import OpportunityCard from "../components/OpportunityCard";
 import { authFetch } from "../api";
 
 export default function Opportunities() {
   const [keywords, setKeywords] = useState("");
+  const navigate = useNavigate();
   interface Result {
     id: string;
     title: string;
@@ -16,6 +18,11 @@ export default function Opportunities() {
     queryFn: async () => {
       const params = new URLSearchParams({ q: keywords });
       const res = await authFetch(`/api/opportunity/search?${params.toString()}`);
+      if (res.status === 401) {
+        localStorage.removeItem('token');
+        navigate('/login');
+        return [] as Result[];
+      }
       if (!res.ok) return [] as Result[];
       return res.json();
     },

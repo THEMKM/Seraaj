@@ -31,11 +31,16 @@ def apply(
     if not session.get(Opportunity, UUID(opp_id)):
         raise HTTPException(status_code=404, detail="Opportunity not found")
 
-    application = Application(
-        **application_in.model_dump(),
-        opportunity_id=UUID(opp_id),
-        volunteer_id=user.id,
-    )
+    duplicate = session.exec(
+        select(Application).where(
+            Application.volunteer_id == user.id,
+            Application.opportunity_id == UUID(opp_id),
+        )
+    ).first()
+    if duplicate:
+        raise HTTPException(status_code=400, detail="Already applied")
+    application.opportunity_id = UUID(opp_id)
+    application.volunteer_id = user.id
     session.add(application)
     session.commit()
     session.refresh(application)

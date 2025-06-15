@@ -53,3 +53,45 @@ def test_update_status_and_list_apps():
     apps = client.get(f"/application/org/{org_id}", headers=org_headers)
     assert len(apps.json()) == 1
 
+
+def test_duplicate_application_rejected():
+    org_headers = _auth_header("org3@example.com", role="ORG_ADMIN")
+    org = client.post("/org", json={"name": "O3", "description": "d"}, headers=org_headers)
+    org_id = org.json()["id"]
+    opp = client.post(
+        f"/opportunity/org/{org_id}",
+        json={"title": "T2", "description": "d", "skills_required": ["x"], "min_hours": 1,
+             "start_date": "2025-01-01", "end_date": "2025-01-02", "is_remote": True, "status": "OPEN"},
+        headers=org_headers,
+    )
+    opp_id = opp.json()["id"]
+    vol_headers = _auth_header("v3@example.com")
+    uid = client.get("/auth/users/me", headers=vol_headers).json()["id"]
+    client.put(
+        "/volunteer/profile",
+        json={
+            "user_id": uid,
+            "full_name": "Name",
+            "skills": ["x"],
+            "interests": [],
+            "languages": ["en"],
+            "location_country": "US",
+            "location_city": "C",
+            "availability_hours": 5,
+        },
+        headers=vol_headers,
+    )
+    first = client.post(
+        f"/application/{opp_id}/apply",
+        json={"volunteer_id": uid, "opportunity_id": opp_id, "status": "PENDING"},
+        headers=vol_headers,
+    )
+    assert first.status_code == 200
+    dup = client.post(
+        f"/application/{opp_id}/apply",
+        json={"volunteer_id": uid, "opportunity_id": opp_id, "status": "PENDING"},
+        headers=vol_headers,
+    )
+    assert dup.status_code == 400
+    assert dup.json()["detail"] == "Already applied"
+

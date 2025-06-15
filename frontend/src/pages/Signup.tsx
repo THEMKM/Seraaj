@@ -25,8 +25,9 @@ export default function Signup() {
         throw new Error(data.detail || 'Signup failed');
       }
       navigate('/login');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
+      else setError('Signup failed');
     }
   }
 
