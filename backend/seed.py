@@ -1,5 +1,5 @@
 from faker import Faker
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from app.routers.auth import get_password_hash
 
@@ -62,17 +62,29 @@ def create_profiles(session: Session, users: list[User]):
     session.commit()
 
 
-def create_orgs(session: Session, count: int = 20) -> list[Organization]:
+def create_orgs(
+    session: Session, admins: list[User] | None = None, count: int = 20
+) -> list[Organization]:
+    """Create organizations owned by actual ORG_ADMIN users."""
+
+    admins = admins or session.exec(
+        select(User).where(User.role == UserRole.ORG_ADMIN)
+    ).all()
+    if not admins:
+        raise ValueError("No ORG_ADMIN users available for organization owners")
+
     orgs = []
     for _ in range(count):
+        owner = choice(admins)
         org = Organization(
             name=fake.company(),
             description=fake.bs(),
             website=fake.url(),
-            owner_id=uuid4(),  # placeholder
+            owner_id=owner.id,
         )
         session.add(org)
         orgs.append(org)
+
     session.commit()
     for org in orgs:
         session.refresh(org)
@@ -121,7 +133,8 @@ def seed():
         create_demo_accounts(session)
         users = create_users(session)
         create_profiles(session, users)
-        orgs = create_orgs(session)
+        admins = session.exec(select(User).where(User.role == UserRole.ORG_ADMIN)).all()
+        orgs = create_orgs(session, admins=admins)
         opps = create_opportunities(session, orgs)
         create_applications(session, users, opps)
     print("Seed complete")
