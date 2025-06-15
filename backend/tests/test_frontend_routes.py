@@ -82,7 +82,7 @@ def test_my_apps_and_applicants():
     )
     client.post(
         f"/application/{opp_id}/apply",
-        json={"volunteer_id": uid, "opportunity_id": opp_id, "status": "PENDING"},
+        json={},
         headers=vol_h,
     )
 

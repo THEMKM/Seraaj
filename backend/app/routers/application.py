@@ -15,6 +15,12 @@ from ..models import (
 )
 from .dependencies import require_role
 
+
+class ApplicationCreate(SQLModel):
+    """Allowed fields when applying to an opportunity."""
+
+    status: ApplicationStatus = ApplicationStatus.PENDING
+
 router = APIRouter(prefix="/application", tags=["application"])
 # Additional router for paths not under /application prefix
 extra_router = APIRouter(tags=["application"])
@@ -23,16 +29,23 @@ extra_router = APIRouter(tags=["application"])
 @router.post("/{opp_id}/apply", response_model=Application)
 def apply(
     opp_id: str,
-    application: Application,
+    application_in: ApplicationCreate,
     session: Session = Depends(get_session),
     user=Depends(require_role("VOLUNTEER")),
 ) -> Application:
     opp = session.get(Opportunity, UUID(opp_id))
     if not opp:
         raise HTTPException(status_code=404, detail="Opportunity not found")
-    if opp.status != OpportunityStatus.OPEN:
-        raise HTTPException(status_code=400, detail="Opportunity not open")
-    application.opportunity_id = opp.id
+
+    duplicate = session.exec(
+        select(Application).where(
+            Application.volunteer_id == user.id,
+            Application.opportunity_id == UUID(opp_id),
+        )
+    ).first()
+    if duplicate:
+        raise HTTPException(status_code=400, detail="Already applied")
+    application.opportunity_id = UUID(opp_id)
     application.volunteer_id = user.id
     session.add(application)
     session.commit()

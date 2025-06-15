@@ -43,7 +43,7 @@ def test_update_status_and_list_apps():
     )
     app_resp = client.post(
         f"/application/{opp_id}/apply",
-        json={"volunteer_id": profile.json()["user_id"], "opportunity_id": opp_id, "status": "PENDING"},
+        json={},
         headers=vol_headers,
     )
     app_id = app_resp.json()["id"]
@@ -77,6 +77,19 @@ def test_apply_closed_opportunity():
 
     vol_h = _auth_header("volclosed@example.com")
     uid = client.get("/auth/users/me", headers=vol_h).json()["id"]
+def test_duplicate_application_rejected():
+    org_headers = _auth_header("org3@example.com", role="ORG_ADMIN")
+    org = client.post("/org", json={"name": "O3", "description": "d"}, headers=org_headers)
+    org_id = org.json()["id"]
+    opp = client.post(
+        f"/opportunity/org/{org_id}",
+        json={"title": "T2", "description": "d", "skills_required": ["x"], "min_hours": 1,
+             "start_date": "2025-01-01", "end_date": "2025-01-02", "is_remote": True, "status": "OPEN"},
+        headers=org_headers,
+    )
+    opp_id = opp.json()["id"]
+    vol_headers = _auth_header("v3@example.com")
+    uid = client.get("/auth/users/me", headers=vol_headers).json()["id"]
     client.put(
         "/volunteer/profile",
         json={
@@ -86,16 +99,22 @@ def test_apply_closed_opportunity():
             "interests": [],
             "languages": ["en"],
             "location_country": "US",
-            "location_city": "B",
+            "location_city": "C",
             "availability_hours": 5,
         },
-        headers=vol_h,
+        headers=vol_headers,
     )
-    resp = client.post(
+    first = client.post(
         f"/application/{opp_id}/apply",
         json={"volunteer_id": uid, "opportunity_id": opp_id, "status": "PENDING"},
-        headers=vol_h,
+        headers=vol_headers,
     )
-    assert resp.status_code == 400
-    assert resp.json()["detail"] == "Opportunity not open"
+    assert first.status_code == 200
+    dup = client.post(
+        f"/application/{opp_id}/apply",
+        json={"volunteer_id": uid, "opportunity_id": opp_id, "status": "PENDING"},
+        headers=vol_headers,
+    )
+    assert dup.status_code == 400
+    assert dup.json()["detail"] == "Already applied"
 
