@@ -43,7 +43,7 @@ def test_update_status_and_list_apps():
     )
     app_resp = client.post(
         f"/application/{opp_id}/apply",
-        json={"volunteer_id": profile.json()["user_id"], "opportunity_id": opp_id, "status": "PENDING"},
+        json={},
         headers=vol_headers,
     )
     app_id = app_resp.json()["id"]
