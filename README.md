@@ -24,3 +24,16 @@ print(f"Match score: {score:.2f}")
 The algorithm assigns points based on the organization's weight for each skill
 and category and the volunteer's proficiency or interest level. The result is a
 normalized score between 0 and 1.
+
+## Messaging Prototype
+
+The `chat` package contains a small FastAPI application demonstrating in-platform messaging between volunteers and organizations.
+
+Run the server with:
+
+```bash
+uvicorn chat.server:app
+```
+
+Create a conversation and send messages via the HTTP API or connect to
+`/ws/chat/{conversation_id}` using WebSocket for realtime updates.
