@@ -1,143 +1,134 @@
-# Seraaj
+# Seraaj Matching Prototype
 
-This repository contains the source code for **Seraaj**, a volunteer–organization matching platform. It is currently under active development.
+This repository contains a minimal prototype illustrating how weighted skills,
+volunteer proficiency, availability, and location can be used to compute a
+match score between volunteers and opportunities. It also exposes simple
+recommendation helpers and a feedback store.
 
-## Structure
-- `backend/` – FastAPI application
-- `frontend/` – React application
-- `.github/workflows/` – CI/CD pipelines
+## Usage
 
-### Quick start
+```python
+from matching import (
+    Location,
+    Opportunity,
+    VolunteerProfile,
+    score_opportunity,
+    recommend_opportunities,
+)
 
-```bash
-git clone https://github.com/<you>/seraaj.git && cd seraaj
+opportunity = Opportunity(
+    skills_weighted={"python": 5, "sql": 3},
+    categories_weighted={"data": 2},
+    availability_required={"mon": ["am"]},
+    location=Location(40.0, -75.0),
+)
 
-# copy env template
-cp .env.example .env
+volunteer = VolunteerProfile(
+    skill_proficiency={"python": "expert", "sql": "intermediate"},
+    interest_level={"data": "high"},
+    availability={"mon": ["am", "pm"]},
+    preferred_location=Location(40.1, -75.1),
+)
 
-# one-liner dev stack
-make dev
+score = score_opportunity(opportunity, volunteer)
+print(f"Match score: {score:.2f}")
 
-# open tabs
-open http://localhost:8000/docs        # FastAPI swagger
-open http://localhost:5173             # React (start via separate prompt)
-
-# seed demo data if not auto-seeded
-make seed
-
-# run all tests
-make test
+# Recommend the best opportunities for the volunteer
+recommended = recommend_opportunities(volunteer, [opportunity])
+print(recommended)
 ```
 
-The frontend is built with Vite, React Router and Tailwind CSS.
+The algorithm considers weighted skills, interest categories, availability,
+and proximity to produce a final score between 0 and 1.
 
-### Authentication
+### Learning Paths and Gamification
 
-User registration and login are handled by custom JWT endpoints exposed at `/auth/register` and `/auth/login`. A `/auth/users/me` endpoint returns the authenticated user. Tokens are generated with `python-jose`, passwords hashed with `passlib`, and each token encodes the user's role (`VOLUNTEER`, `ORG_ADMIN`, `SUPERADMIN`).
+Additional helpers can suggest opportunities and external resources for a
+volunteer's desired skills, store skill endorsements, and award badges.
 
-### Seeding demo data
+```python
+from matching import (
+    LearningResource,
+    suggest_learning_path,
+    ENDORSEMENT_STORE,
+    SkillEndorsement,
+    check_and_award_badges,
+    BADGE_STORE,
+)
+from datetime import datetime
 
-Install backend dependencies then run the seed script to populate the local database with sample data:
+# Recommend learning options
+resources = [LearningResource("python", "https://example.com/python-course")]
+opps, res = suggest_learning_path(volunteer, [opportunity], resources)
 
-```bash
-pip install -r backend/requirements.txt
-python backend/seed.py
+# Record an endorsement after opportunity completion
+ENDORSEMENT_STORE.add(
+    SkillEndorsement(
+        volunteer_id="vol1",
+        organization_id="org1",
+        opportunity_id="opp1",
+        skill_name="python",
+        endorsement_date=datetime.utcnow(),
+    )
+)
+
+# Award badges based on hours and endorsements
+check_and_award_badges("vol1", hours=12, endorsement_count=1)
+print(BADGE_STORE.for_volunteer("vol1"))
 ```
 
-The application no longer drops tables automatically on startup. To reset the
-database during development you can either run the seed script above or start
-the server with `ENV=dev` which calls `init_db()` on launch.
+### Messaging and Workspaces
 
-The seed script creates one account for each user role with password `pass123`:
+You can create conversations between users and lightweight workspaces for
+accepted applications.
 
-- Volunteer – `volunteer@example.com`
-- Organization admin – `orgadmin@example.com`
-- Superadmin – `superadmin@example.com`
+```python
+from matching import MESSAGING_SERVICE, WORKSPACE_STORE
 
-### Environment variables
+# Start a conversation
+cid = MESSAGING_SERVICE.create_conversation(["vol1", "org1"])
+MESSAGING_SERVICE.send_message(cid, "vol1", "Hello!")
+print(MESSAGING_SERVICE.history(cid))
 
-Copy `.env.sample` to `.env` and review values. At minimum, set `SECRET_KEY` for JWT signing.
-Set `REDIS_URL` if you want background jobs to run (defaults to `redis://localhost:6379/0`).
-
-### Database migrations
-
-Run Postgres locally via docker compose:
-
-```bash
-docker-compose up -d db
+# Manage a workspace
+ws = WORKSPACE_STORE.create_workspace("app1")
+WORKSPACE_STORE.add_task("app1", "Submit ID check")
+WORKSPACE_STORE.complete_task("app1", 0)
+print(WORKSPACE_STORE.get("app1"))
 ```
 
-Apply migrations with Alembic:
+### Impact Reporting and Analytics
 
-```bash
-cd backend
-alembic upgrade head
+Record completed opportunities and generate simple impact statements or platform insights.
+
+```python
+from matching import (
+    CompletionRecord,
+    ANALYTICS_SERVICE,
+    OrganizationImpact,
+)
+
+# Record that a volunteer completed work
+ANALYTICS_SERVICE.record_completion(
+    CompletionRecord(
+        volunteer_id="vol1",
+        organization_id="org1",
+        opportunity_id="opp1",
+        hours=5,
+        skills=["python"],
+    )
+)
+
+# Fetch an organization impact report and export it
+report = ANALYTICS_SERVICE.organization_report("org1")
+print(report)
+ANALYTICS_SERVICE.export_csv_for_org("org1", "org1_report.csv")
+
+# Generate a volunteer certificate
+certificate = ANALYTICS_SERVICE.generate_certificate("vol1", "opp1")
+print(certificate)
+
+# Get platform-wide insights
+insights = ANALYTICS_SERVICE.platform_insights()
+print(insights)
 ```
-
-Generate a new migration after modifying models:
-
-```bash
-alembic revision --autogenerate -m "describe change"
-```
-
-### Matching job
-
-Celery runs a nightly task to recompute volunteer–opportunity match scores.
-Start a worker with beat enabled:
-
-```bash
-celery -A app.matching worker -B --loglevel=info
-```
-
-### Recognition service
-
-The `/recognition/{app_id}` endpoint generates a signed Cloudinary upload URL and
-returns a PNG link for social media sharing.
-
-### Local deployment
-
-You can try the full stack locally using Docker Compose for Postgres and Redis.
-
-```bash
-docker-compose up -d  # starts `db` and `redis` services
-```
-
-Apply migrations and seed demo data manually if you prefer running the services separately:
-
-```bash
-cd backend
-alembic upgrade head
-python seed.py
-uvicorn app.main:app --reload
-```
-
-In another terminal:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-The API is now available at `http://localhost:8000/docs` and the web app at
-`http://localhost:5173`.
-
-Use the demo credentials above to sign in as each role and explore the platform.
-
-The frontend includes a dark mode toggle in the top-right corner. Your choice is
-stored in `localStorage`. Superadmins can visit `/settings` to toggle feature
-flags and view basic system health.
-
-### Frontend (React)
-
-```bash
-cd frontend         # if you’re running outside docker
-npm install
-npm run dev         # Vite on :5173
-
-# run lint & e2e tests
-npm run lint
-npm run test:e2e
-```
-
-Design system: Tailwind CSS + shadcn/ui.  Icons: lucide-react.  Charts: recharts.
