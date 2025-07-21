@@ -7,6 +7,7 @@ from typing import Dict, Iterable, List, Optional, Tuple
 from .models import Location, Opportunity, VolunteerProfile
 
 # scoring constants for proficiency and interest
+
 PROFICIENCY_POINTS: Dict[str, int] = {
     "beginner": 1,
     "intermediate": 2,
