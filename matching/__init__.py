@@ -40,3 +40,4 @@ __all__ = [
     "leaderboard_by_hours",
     "suggest_learning_path",
 ]
+

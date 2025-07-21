@@ -5,6 +5,7 @@ volunteer proficiency, availability, and location can be used to compute a
 match score between volunteers and opportunities. It also exposes simple
 recommendation helpers and a feedback store.
 
+
 ## Usage
 
 ```python
@@ -23,11 +24,13 @@ opportunity = Opportunity(
     location=Location(40.0, -75.0),
 )
 
+
 volunteer = VolunteerProfile(
     skill_proficiency={"python": "expert", "sql": "intermediate"},
     interest_level={"data": "high"},
     availability={"mon": ["am", "pm"]},
     preferred_location=Location(40.1, -75.1),
+
 )
 
 score = score_opportunity(opportunity, volunteer)
@@ -76,3 +79,4 @@ ENDORSEMENT_STORE.add(
 check_and_award_badges("vol1", hours=12, endorsement_count=1)
 print(BADGE_STORE.for_volunteer("vol1"))
 ```
+

@@ -16,6 +16,7 @@ from .models import (
 )
 
 # scoring constants for proficiency and interest
+
 PROFICIENCY_POINTS: Dict[str, int] = {
     "beginner": 1,
     "intermediate": 2,
