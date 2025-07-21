@@ -37,3 +37,30 @@ uvicorn chat.server:app
 
 Create a conversation and send messages via the HTTP API or connect to
 `/ws/chat/{conversation_id}` using WebSocket for realtime updates.
+
+## Analytics Prototype
+
+The `analytics` package provides utilities for generating simple impact reports
+from volunteering events. Example usage:
+
+```python
+from analytics import VolunteerEvent, generate_organization_report
+from datetime import datetime
+
+events = [
+    VolunteerEvent(
+        volunteer_id="vol1",
+        organization_id="org1",
+        opportunity_id="opp1",
+        hours=5.0,
+        timestamp=datetime.utcnow(),
+    )
+]
+
+report = generate_organization_report("org1", events)
+print(report)
+```
+
+Use `export_organization_report_csv` to create CSV summaries or
+`generate_volunteer_certificate` to produce a PDF certificate of hours
+contributed.
