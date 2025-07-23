@@ -27,15 +27,17 @@ export default function Signup() {
               {...register('email', { required: true })}
               placeholder="Email"
               type="email"
-              className="input input-bordered w-full"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-brand focus:ring-brand"
             />
             <input
               {...register('password', { required: true })}
               placeholder="Password"
               type="password"
-              className="input input-bordered w-full"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-brand focus:ring-brand"
             />
-            <button className="btn btn-primary w-full">Create account</button>
+            <button className="w-full rounded-md bg-brand px-4 py-2 font-medium text-white hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand">
+              Create account
+            </button>
           </form>
         </CardContent>
       </Card>
