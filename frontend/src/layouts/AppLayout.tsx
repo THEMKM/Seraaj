@@ -1,10 +1,11 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LogOut } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AppLayout() {
   const { user, logout } = useAuth();
+  const location = useLocation();
   return (
     <div className="h-full grid grid-cols-[240px_1fr]">
       <aside className="bg-brand text-white flex flex-col p-4">
@@ -30,9 +31,19 @@ export default function AppLayout() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25 }}
-        className="p-6 overflow-y-auto"
+        className="p-6 overflow-y-auto rounded-tl-3xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm shadow-2xl shadow-brand/20"
       >
-        <Outlet />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
       </motion.main>
     </div>
   );
