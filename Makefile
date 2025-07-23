@@ -6,5 +6,9 @@ dev:  ## spin up full stack locally
 seed: ## run seed script against running backend
 	docker compose exec backend python -m app.seed
 
-test: ## run pytest inside backend container
-	docker compose exec backend pytest -q
+test: ## run pytest; use container when available
+	@if docker compose ps -q backend >/dev/null 2>&1; then \
+		docker compose exec backend pytest -q; \
+	else \
+		pytest -q; \
+	fi
