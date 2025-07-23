@@ -45,6 +45,7 @@ def apply(
     ).first()
     if duplicate:
         raise HTTPException(status_code=400, detail="Already applied")
+    application = Application(**application_in.dict())
     application.opportunity_id = UUID(opp_id)
     application.volunteer_id = user.id
     session.add(application)
