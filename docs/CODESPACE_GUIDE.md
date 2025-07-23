@@ -24,11 +24,13 @@ Follow these steps to launch the app inside a Codespace.
    npm install
    npm run dev
    ```
-   Vite reads `FRONTEND_PORT` and `VITE_BACKEND_URL` from `.env` in the
-   `frontend/` directory. By default the frontend runs on
-   `http://localhost:${FRONTEND_PORT:-5173}` and proxies API requests to the
-   backend.
-5. Open the provided URL in the Codespaces preview or your browser. Log in or
-   sign up to explore the demo data.
+   Vite reads `FRONTEND_PORT` and `VITE_BACKEND_URL` from `.env`. By default the
+   frontend runs on `http://localhost:${FRONTEND_PORT:-5173}` and proxies API
+   requests to the backend.
+5. When Vite starts you will see a port forwarding prompt in Codespaces. Accept
+   it (or open the **Ports** panel) to expose the frontend on port `5173` and
+   the backend on `${BACKEND_PORT:-8000}`. Open the forwarded URL in the preview
+   or your browser. Log in or sign up to explore the demo data.
+
 
 Stop the stack with `Ctrl+C` in each terminal or `docker compose down`.
