@@ -35,3 +35,9 @@ Run Celery with beat to compute match scores daily:
 ```bash
 celery -A app.matching worker -B --loglevel=info
 ```
+
+### Testing
+
+`make test` automatically runs the suite inside the Docker container when
+services are running. If Docker isn't available, tests execute locally
+using an SQLite database configured in `backend/tests/conftest.py`.
