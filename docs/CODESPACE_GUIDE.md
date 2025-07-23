@@ -15,6 +15,9 @@ Follow these steps to launch the app inside a Codespace.
    ```
    This builds the backend and starts Postgres and Redis. The API will be
    available at `http://localhost:${BACKEND_PORT:-8000}`.
+   Note that `make dev` runs continuously, so keep this terminal open. You can
+   open another terminal for the next steps or run `docker compose up -d` to
+   keep the backend running in the background while starting the frontend.
 4. **Run the frontend**:
    ```bash
    cd frontend
