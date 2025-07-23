@@ -1,5 +1,6 @@
 import uuid
 from fastapi.testclient import TestClient
+import os
 from app.main import app
 from app.db import init_db
 
@@ -7,17 +8,27 @@ client = TestClient(app)
 
 
 def setup_module():
+    os.environ.setdefault("SECRET_KEY", "dev-secret")
     init_db()
 
 
-def _auth_header(email: str, role: str = "VOLUNTEER"):
-    resp = client.post("/auth/register", json={"email": email, "password": "pw", "role": role})
+from jose import jwt
+
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret")
+ALGORITHM = "HS256"
+
+
+def _auth_header(email: str, role: str = "VOLUNTEER") -> tuple[dict, str]:
+    resp = client.post(
+        "/auth/register", json={"email": email, "password": "pw", "role": role}
+    )
     token = resp.json()["access_token"]
-    return {"Authorization": f"Bearer {token}"}
+    user_id = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])["sub"]
+    return {"Authorization": f"Bearer {token}"}, user_id
 
 
 def test_update_status_and_list_apps():
-    org_headers = _auth_header("org2@example.com", role="ORG_ADMIN")
+    org_headers, _ = _auth_header("org2@example.com", role="ORG_ADMIN")
     org = client.post("/org", json={"name": "O2", "description": "d"}, headers=org_headers)
     org_id = org.json()["id"]
     opp = client.post(
@@ -38,11 +49,11 @@ def test_update_status_and_list_apps():
         headers=org_headers,
     )
     opp_id = opp.json()["id"]
-    vol_headers = _auth_header("v2@example.com")
+    vol_headers, vol_id = _auth_header("v2@example.com")
     profile = client.put(
         "/volunteer/profile",
         json={
-            "user_id": client.get("/auth/me", headers=vol_headers).json()["id"],
+            "user_id": vol_id,
             "full_name": "Name",
             "skills": ["x"],
             "interests": [],
@@ -62,6 +73,9 @@ def test_update_status_and_list_apps():
         json={},
         headers=vol_headers,
     )
+    assert app_resp.status_code == 200
+    assert app_resp.json()["volunteer_id"] == vol_id
+    assert app_resp.json()["opportunity_id"] == opp_id
     app_id = app_resp.json()["id"]
     upd = client.post(f"/application/{app_id}/status", params={"status": "ACCEPTED"}, headers=org_headers)
     assert upd.status_code == 200
@@ -72,7 +86,7 @@ def test_update_status_and_list_apps():
 
 def test_apply_closed_opportunity():
     """Applying to a CLOSED opportunity should fail."""
-    org_h = _auth_header("orgclosed@example.com", role="ORG_ADMIN")
+    org_h, _ = _auth_header("orgclosed@example.com", role="ORG_ADMIN")
     org = client.post("/org", json={"name": "OC", "description": "d"}, headers=org_h)
     org_id = org.json()["id"]
     closed_opp = client.post(
@@ -94,10 +108,9 @@ def test_apply_closed_opportunity():
     )
     opp_id = closed_opp.json()["id"]
 
-    vol_h = _auth_header("volclosed@example.com")
-    uid = client.get("/auth/me", headers=vol_h).json()["id"]
+    vol_h, uid = _auth_header("volclosed@example.com")
 def test_duplicate_application_rejected():
-    org_headers = _auth_header("org3@example.com", role="ORG_ADMIN")
+    org_headers, _ = _auth_header("org3@example.com", role="ORG_ADMIN")
     org = client.post("/org", json={"name": "O3", "description": "d"}, headers=org_headers)
     org_id = org.json()["id"]
     opp = client.post(
@@ -118,8 +131,7 @@ def test_duplicate_application_rejected():
         headers=org_headers,
     )
     opp_id = opp.json()["id"]
-    vol_headers = _auth_header("v3@example.com")
-    uid = client.get("/auth/me", headers=vol_headers).json()["id"]
+    vol_headers, uid = _auth_header("v3@example.com")
     client.put(
         "/volunteer/profile",
         json={
@@ -140,13 +152,13 @@ def test_duplicate_application_rejected():
     )
     first = client.post(
         f"/application/{opp_id}/apply",
-        json={"volunteer_id": uid, "opportunity_id": opp_id, "status": "PENDING"},
+        json={"status": "PENDING"},
         headers=vol_headers,
     )
     assert first.status_code == 200
     dup = client.post(
         f"/application/{opp_id}/apply",
-        json={"volunteer_id": uid, "opportunity_id": opp_id, "status": "PENDING"},
+        json={"status": "PENDING"},
         headers=vol_headers,
     )
     assert dup.status_code == 400
