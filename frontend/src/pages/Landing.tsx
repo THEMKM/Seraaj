@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function Landing() {
   return (
     <main className="flex min-h-screen flex-col bg-white">
-      <section className="flex flex-col items-center justify-center bg-brand text-white text-center py-20 px-4">
+      <section className="flex flex-col items-center justify-center bg-ai-gradient text-white text-center py-20 px-4">
         <h1 className="mb-4 text-5xl font-bold">Light the Way for Change</h1>
         <p className="mb-8 max-w-2xl text-lg">
           Connect with vetted volunteer opportunities—instant apply, instant impact.
