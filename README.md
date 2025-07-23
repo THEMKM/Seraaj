@@ -198,6 +198,14 @@ FORUM_SERVICE.vote_reply(reply_id, up=True)
 
 Pull requests are welcome. Please see `AGENTS.md` for the collaboration workflow and coding conventions.
 
+## Testing
+
+Ensure Docker is installed before running the test suite. The tests execute inside containers and will fail without Docker.
+
+```bash
+make test
+```
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
