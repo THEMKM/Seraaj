@@ -23,7 +23,7 @@ Prerequisites: Docker and Node.js 18+.
 
 ```bash
 make dev            # build and start backend, Postgres and Redis
-make seed           # populate demo data
+make seed           # populate demo data (optional)
 (cd frontend && npm install && npm run dev)
 ```
 
@@ -38,7 +38,10 @@ To seed again later, run:
 
 ```bash
 docker compose exec backend python -m app.seed
+
 ```
+
+Seeding happens automatically on startup when `SEED_DEMO_DATA=true` (set in `.env.example`), so running the script manually is optional.
 
 Backend API runs on `http://localhost:8000` and the frontend on `http://localhost:5173`.
 
@@ -54,6 +57,9 @@ The default Postgres user and password are both `seraaj` as configured in
 `docker-compose.yml`.
 
 For local development you can instead start from `.env.sample`.
+Both environment files include a `SECRET_KEY` entry. Ensure the same value is
+used across them (the default is `dev-secret`) so that JWTs issued by the
+backend can be verified.
 
 ## Usage Examples
 
@@ -211,6 +217,10 @@ Pull requests are welcome. Please see `AGENTS.md` for the collaboration workflow
 ## Testing
 
 Ensure Docker is installed before running the test suite. The tests execute inside containers and will fail without Docker.
+
+The backend uses a `SECRET_KEY` environment variable when issuing and decoding
+JWTs. Tests require this to match the value in your `.env` or `.env.sample`
+(default `dev-secret`).
 
 ```bash
 make test

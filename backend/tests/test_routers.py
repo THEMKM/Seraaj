@@ -27,6 +27,55 @@ def _auth_header(email: str, role: str = "VOLUNTEER") -> tuple[dict, str]:
     return {"Authorization": f"Bearer {token}"}, user_id
 
 
+def test_application_created_successfully():
+    """Volunteer can apply to an open opportunity."""
+    org_h, _ = _auth_header("org-new@example.com", role="ORG_ADMIN")
+    org = client.post("/org", json={"name": "ONew", "description": "d"}, headers=org_h)
+    org_id = org.json()["id"]
+    opp = client.post(
+        f"/opportunity/org/{org_id}",
+        json={
+            "title": "TT",
+            "description": "d",
+            "skills_required": ["x"],
+            "skills_weighted": {"x": 5},
+            "categories_weighted": {"general": 1},
+            "availability_required": {"mon": ["am"]},
+            "min_hours": 1,
+            "start_date": "2025-01-01",
+            "end_date": "2025-01-02",
+            "is_remote": True,
+            "status": "OPEN",
+        },
+        headers=org_h,
+    )
+    opp_id = opp.json()["id"]
+    vol_h, v_id = _auth_header("vol-new@example.com")
+    client.put(
+        "/volunteer/profile",
+        json={
+            "user_id": v_id,
+            "full_name": "Name",
+            "skills": ["x"],
+            "interests": [],
+            "languages": ["en"],
+            "skill_proficiency": {"x": "expert"},
+            "desired_skills": ["python"],
+            "location_country": "US",
+            "location_city": "A",
+            "location_lat": 0.0,
+            "location_lng": 0.0,
+            "availability_hours": 5,
+        },
+        headers=vol_h,
+    )
+    resp = client.post(f"/application/{opp_id}/apply", json={}, headers=vol_h)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["volunteer_id"] == v_id
+    assert data["opportunity_id"] == opp_id
+
+
 def test_update_status_and_list_apps():
     org_headers, _ = _auth_header("org2@example.com", role="ORG_ADMIN")
     org = client.post("/org", json={"name": "O2", "description": "d"}, headers=org_headers)
