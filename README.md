@@ -230,3 +230,5 @@ make test
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
+For step-by-step Codespaces instructions see [docs/CODESPACE_GUIDE.md](docs/CODESPACE_GUIDE.md).
+
