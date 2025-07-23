@@ -17,3 +17,26 @@ body,
 .card-shadow {
   @apply shadow-lg shadow-black/5;
 }
+
+@layer components {
+  .card {
+    @apply rounded-2xl bg-white text-gray-900;
+  }
+  .dark .card {
+    @apply bg-gray-800 text-gray-100;
+  }
+
+  .btn {
+    @apply rounded-2xl bg-brand px-4 py-2 text-white hover:bg-brand-dark focus:outline-none;
+  }
+  .dark .btn {
+    @apply bg-brand-dark;
+  }
+
+  .input {
+    @apply rounded border px-3 py-2;
+  }
+  .dark .input {
+    @apply bg-gray-800 border-gray-700 text-gray-100;
+  }
+}
