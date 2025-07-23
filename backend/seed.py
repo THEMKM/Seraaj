@@ -63,8 +63,12 @@ def create_profiles(session: Session, users: list[User]):
             skills=sample(SKILLS, k=3),
             interests=sample(SKILLS, k=2),
             languages=["en"],
+            skill_proficiency={s: "beginner" for s in sample(SKILLS, k=2)},
+            desired_skills=sample(SKILLS, k=2),
             location_city=fake.city(),
             location_country=fake.country(),
+            location_lat=float(fake.latitude()),
+            location_lng=float(fake.longitude()),
             availability_hours=randint(1, 10),
         )
         profile.embedding = embed(" ".join(profile.skills or []))
@@ -110,6 +114,9 @@ def create_opportunities(session: Session, orgs: list[Organization], count: int 
             title=fake.job(),
             description=fake.text(),
             skills_required=sample(SKILLS, k=3),
+            skills_weighted={s: randint(1, 5) for s in sample(SKILLS, k=3)},
+            categories_weighted={"general": randint(1, 3)},
+            availability_required={"mon": ["am"]},
             min_hours=randint(1, 10),
             start_date=fake.date_this_year(),
             end_date=fake.date_between(start_date="today", end_date="+30d"),

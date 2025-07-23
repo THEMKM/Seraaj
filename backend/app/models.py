@@ -1,6 +1,6 @@
 from __future__ import annotations
 from datetime import datetime, date
-from typing import List
+from typing import List, Dict
 from uuid import UUID, uuid4
 
 import enum
@@ -40,8 +40,16 @@ class VolunteerProfile(SQLModel, table=True):
     skills: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.JSON))
     interests: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.JSON))
     languages: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.JSON))
+    skill_proficiency: Dict[str, str] = Field(
+        sa_column=sqlalchemy.Column(sqlalchemy.JSON), default_factory=dict
+    )
+    desired_skills: List[str] = Field(
+        sa_column=sqlalchemy.Column(sqlalchemy.JSON), default_factory=list
+    )
     location_city: str | None
     location_country: str
+    location_lat: float | None = None
+    location_lng: float | None = None
     availability_hours: int
     embedding: list[float] | None = Field(
         sa_column=sqlalchemy.Column(Vector(768), index=True, nullable=True),
@@ -65,6 +73,15 @@ class Opportunity(SQLModel, table=True):
     embedding: list[float] | None = Field(
         sa_column=sqlalchemy.Column(Vector(768), index=True, nullable=True),
         default=None,
+    )
+    skills_weighted: Dict[str, int] = Field(
+        sa_column=sqlalchemy.Column(sqlalchemy.JSON), default_factory=dict
+    )
+    categories_weighted: Dict[str, int] = Field(
+        sa_column=sqlalchemy.Column(sqlalchemy.JSON), default_factory=dict
+    )
+    availability_required: Dict[str, List[str]] = Field(
+        sa_column=sqlalchemy.Column(sqlalchemy.JSON), default_factory=dict
     )
     skills_required: List[str] = Field(sa_column=sqlalchemy.Column(sqlalchemy.JSON))
     min_hours: int

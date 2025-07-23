@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List
+from typing import List, Dict
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
@@ -30,6 +30,9 @@ class OpportunityCreate(SQLModel):
     title: str
     description: str
     skills_required: List[str]
+    skills_weighted: Dict[str, int] | None = None
+    categories_weighted: Dict[str, int] | None = None
+    availability_required: Dict[str, List[str]] | None = None
     min_hours: int
     start_date: date
     end_date: date
@@ -50,7 +53,7 @@ def create_opportunity(
         raise HTTPException(status_code=404, detail="Organization not found")
     if org.owner_id != user.id:
         raise HTTPException(status_code=403, detail="Not authorized")
-    opp = Opportunity(**opp_in.model_dump(), org_id=org.id)
+    opp = Opportunity(**opp_in.model_dump(exclude_none=True), org_id=org.id)
     session.add(opp)
     session.commit()
     session.refresh(opp)
