@@ -457,6 +457,27 @@ class ForumService:
         )
         return rid
 
+      def vote_post(self, post_id: str, up: bool = True) -> None:
+        post = self.posts.get(post_id)
+        if not post:
+            return
+        if up:
+            post.upvotes += 1
+        else:
+            post.downvotes += 1
+
+    def vote_reply(self, reply_id: str, up: bool = True) -> None:
+        for reply in self.replies:
+            if reply.reply_id == reply_id:
+                if up:
+                    reply.upvotes += 1
+                else:
+                    reply.downvotes += 1
+                break
+
+    def posts_by_author(self, author_id: str) -> List[ForumPost]:
+        return [p for p in self.posts.values() if p.author_id == author_id]
+
     def posts_in_category(self, category_id: str) -> List[ForumPost]:
         return [p for p in self.posts.values() if p.category_id == category_id]
 

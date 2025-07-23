@@ -159,5 +159,9 @@ org_profile.testimonials.append("Amazing nonprofit")
 cat_id = FORUM_SERVICE.create_category("General")
 post_id = FORUM_SERVICE.create_post(cat_id, "vol1", "Hello", "Nice to meet you")
 FORUM_SERVICE.add_reply(post_id, "org1", "Welcome!")
+FORUM_SERVICE.vote_post(post_id, up=True)
 print(FORUM_SERVICE.replies_for_post(post_id))
-```
+
+reply_id = FORUM_SERVICE.add_reply(post_id, "vol1", "Thanks!")
+FORUM_SERVICE.vote_reply(reply_id, up=True)
+

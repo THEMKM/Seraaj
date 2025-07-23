@@ -198,6 +198,8 @@ class ForumPost:
     title: str
     content: str
     timestamp: datetime
+    upvotes: int = 0
+    downvotes: int = 0
 
 
 @dataclass
@@ -209,3 +211,5 @@ class ForumReply:
     author_id: str
     content: str
     timestamp: datetime
+    upvotes: int = 0
+    downvotes: int = 0
