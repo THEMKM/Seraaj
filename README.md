@@ -1,11 +1,41 @@
-# Seraaj Matching Prototype
+# Seraaj Volunteer Matching Platform
 
-This repository contains a minimal prototype illustrating how weighted skills,
-volunteer proficiency, availability, and location can be used to compute a
-match score between volunteers and opportunities. It also exposes simple
-recommendation helpers and a feedback store.
+Seraaj is a demonstration project showing how to match volunteers to opportunities and manage collaboration around them.  It provides a full FastAPI backend, a React frontend, and a small matching library that can be used standalone.
 
-## Usage
+Key features include:
+
+- Weighted skill and interest matching with location and availability filters.
+- Learning paths, endorsements, and badge awards for gamification.
+- Messaging and lightweight workspaces for accepted applications.
+- Impact analytics and certificate generation.
+- Rich profiles with testimonials and a simple forum service.
+
+The repository is organised as follows:
+
+- `backend/` – FastAPI app and Alembic migrations.
+- `frontend/` – Vite + React interface styled with Tailwind.
+- `matching/` – Pure‑Python scoring algorithms and utilities.
+- `docs/adr/` – Architecture decision records.
+
+## Quickstart
+
+Prerequisites: Docker and Node.js 18+.
+
+```bash
+make dev            # build and start backend, Postgres and Redis
+make seed           # populate demo data
+(cd frontend && npm install && npm run dev)
+```
+
+Everything can also be started with a single line:
+
+```bash
+docker compose up --build -d && docker compose exec backend python -m app.seed && (cd frontend && npm install && npm run dev)
+```
+
+Backend API runs on `http://localhost:8000` and the frontend on `http://localhost:5173`.
+
+## Usage Examples
 
 ```python
 from matching import (
@@ -38,13 +68,9 @@ recommended = recommend_opportunities(volunteer, [opportunity])
 print(recommended)
 ```
 
-The algorithm considers weighted skills, interest categories, availability,
-and proximity to produce a final score between 0 and 1.
+The algorithm considers weighted skills, interest categories, availability and proximity to produce a final score between 0 and 1.
 
 ### Learning Paths and Gamification
-
-Additional helpers can suggest opportunities and external resources for a
-volunteer's desired skills, store skill endorsements, and award badges.
 
 ```python
 from matching import (
@@ -79,9 +105,6 @@ print(BADGE_STORE.for_volunteer("vol1"))
 
 ### Messaging and Workspaces
 
-You can create conversations between users and lightweight workspaces for
-accepted applications.
-
 ```python
 from matching import MESSAGING_SERVICE, WORKSPACE_STORE
 
@@ -98,8 +121,6 @@ print(WORKSPACE_STORE.get("app1"))
 ```
 
 ### Impact Reporting and Analytics
-
-Record completed opportunities and generate simple impact statements or platform insights.
 
 ```python
 from matching import (
@@ -135,9 +156,6 @@ print(insights)
 
 ### Rich Profiles and Community Forums
 
-Profiles can now store testimonials and portfolios. A lightweight forum service
-allows community discussion.
-
 ```python
 from matching import (
     VolunteerProfile,
@@ -164,4 +182,13 @@ print(FORUM_SERVICE.replies_for_post(post_id))
 
 reply_id = FORUM_SERVICE.add_reply(post_id, "vol1", "Thanks!")
 FORUM_SERVICE.vote_reply(reply_id, up=True)
+```
+
+## Contributing
+
+Pull requests are welcome. Please see `AGENTS.md` for the collaboration workflow and coding conventions.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
