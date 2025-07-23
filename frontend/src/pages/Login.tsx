@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
 import { Card, CardContent } from '../components/ui/card';
+import FormField from '../components/FormField';
 
 interface LoginForm {
   email: string;
@@ -24,18 +25,24 @@ export default function Login() {
         <CardContent className="p-6 space-y-4">
           <h2 className="text-2xl font-semibold text-center">Login</h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <input
-              {...register('email', { required: true })}
-              placeholder="Email"
-              type="email"
-              className="input input-bordered w-full"
-            />
-            <input
-              {...register('password', { required: true })}
-              placeholder="Password"
-              type="password"
-              className="input input-bordered w-full"
-            />
+            <FormField label="Email">
+              <input
+                id="login-email"
+                {...register('email', { required: true })}
+                placeholder="Email"
+                type="email"
+                className="input input-bordered w-full"
+              />
+            </FormField>
+            <FormField label="Password">
+              <input
+                id="login-password"
+                {...register('password', { required: true })}
+                placeholder="Password"
+                type="password"
+                className="input input-bordered w-full"
+              />
+            </FormField>
             <button className="btn btn-primary w-full">Sign in</button>
           </form>
         </CardContent>
