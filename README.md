@@ -232,3 +232,9 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 For step-by-step Codespaces instructions see [docs/CODESPACE_GUIDE.md](docs/CODESPACE_GUIDE.md).
 
+
+## Troubleshooting
+
+- **View logs**: `docker compose logs` shows container output.
+- **Check env vars**: run `echo $FRONTEND_PORT` or open `frontend/.env`.
+- **Reinstall frontend deps**: from `frontend/` run `npm install`.
