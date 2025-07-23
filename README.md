@@ -47,6 +47,9 @@ The default Postgres user and password are both `seraaj` as configured in
 `docker-compose.yml`.
 
 For local development you can instead start from `.env.sample`.
+Both environment files include a `SECRET_KEY` entry. Ensure the same value is
+used across them (the default is `dev-secret`) so that JWTs issued by the
+backend can be verified.
 
 ## Usage Examples
 
@@ -204,6 +207,10 @@ Pull requests are welcome. Please see `AGENTS.md` for the collaboration workflow
 ## Testing
 
 Ensure Docker is installed before running the test suite. The tests execute inside containers and will fail without Docker.
+
+The backend uses a `SECRET_KEY` environment variable when issuing and decoding
+JWTs. Tests require this to match the value in your `.env` or `.env.sample`
+(default `dev-secret`).
 
 ```bash
 make test
