@@ -9,6 +9,10 @@ from .routers import (
     application_extra,
     recognition,
     settings as settings_router,
+    conversation,
+    workspace,
+    forum,
+    analytics,
 )
 from .routers import match as match_router
 from .db import engine, SQLModel
@@ -27,6 +31,10 @@ app.include_router(application_extra)
 app.include_router(recognition)
 app.include_router(settings_router)
 app.include_router(match_router.router)
+app.include_router(conversation)
+app.include_router(workspace)
+app.include_router(forum)
+app.include_router(analytics)
 
 
 @app.on_event("startup")

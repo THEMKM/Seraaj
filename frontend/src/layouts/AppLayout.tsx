@@ -16,6 +16,7 @@ export default function AppLayout() {
           <Link to="/matches" className="hover:underline">
             Matches
           </Link>
+          <Link to="/messages" className="hover:underline">Messages</Link>
         </nav>
         <button
           onClick={logout}

@@ -6,6 +6,10 @@ from .application import router as application, extra_router as application_extr
 from .recognition import router as recognition
 from .settings import router as settings
 from .match import router as match_router
+from .conversation import router as conversation
+from .workspace import router as workspace
+from .forum import router as forum
+from .analytics import router as analytics
 
 __all__ = [
     "auth",
@@ -17,4 +21,8 @@ __all__ = [
     "recognition",
     "settings",
     "match_router",
+    "conversation",
+    "workspace",
+    "forum",
+    "analytics",
 ]
