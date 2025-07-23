@@ -3,9 +3,11 @@
 Follow these steps to launch the app inside a Codespace.
 
 1. **Create a Codespace** on GitHub and wait for the container to build.
-2. In the terminal, copy the example environment file:
+2. In the terminal, copy the example environment file so both the backend and
+   frontend share the same values:
    ```bash
    cp .env.example .env
+   cp .env.example frontend/.env # or export these variables manually
    ```
 3. **Start the backend and services**:
    ```bash
@@ -19,9 +21,10 @@ Follow these steps to launch the app inside a Codespace.
    npm install
    npm run dev
    ```
-   Vite reads `FRONTEND_PORT` and `VITE_BACKEND_URL` from `.env`. By default the
-   frontend runs on `http://localhost:${FRONTEND_PORT:-5173}` and proxies API
-   requests to the backend.
+   Vite reads `FRONTEND_PORT` and `VITE_BACKEND_URL` from `.env` in the
+   `frontend/` directory. By default the frontend runs on
+   `http://localhost:${FRONTEND_PORT:-5173}` and proxies API requests to the
+   backend.
 5. Open the provided URL in the Codespaces preview or your browser. Log in or
    sign up to explore the demo data.
 
