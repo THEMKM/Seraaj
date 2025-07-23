@@ -5,12 +5,13 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlmodel import Session
 
+from ..config import get_settings
 from ..db import get_session
 from ..models import User, UserRole
 from uuid import UUID
-import os
 
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
+settings = get_settings()
+SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = "HS256"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
