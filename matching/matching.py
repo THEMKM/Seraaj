@@ -457,7 +457,7 @@ class ForumService:
         )
         return rid
 
-    def vote_post(self, post_id: str, up: bool = True) -> None:
+      def vote_post(self, post_id: str, up: bool = True) -> None:
         post = self.posts.get(post_id)
         if not post:
             return
