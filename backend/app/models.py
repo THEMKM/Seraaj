@@ -98,3 +98,77 @@ class Application(SQLModel, table=True):
     status: ApplicationStatus
     match_score: float | None = None
     applied_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class Conversation(SQLModel, table=True):
+    """Conversation between participants."""
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    participant_ids: list[UUID] = Field(
+        sa_column=sqlalchemy.Column(sqlalchemy.JSON)
+    )
+
+
+class Message(SQLModel, table=True):
+    """Single message in a conversation."""
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    conversation_id: UUID = Field(foreign_key="conversation.id")
+    sender_id: UUID = Field(foreign_key="user.id")
+    content: str
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+
+class Workspace(SQLModel, table=True):
+    """Collaboration workspace for an application."""
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    application_id: UUID = Field(foreign_key="application.id", unique=True)
+    notes: str | None = ""
+    tasks: list[dict] = Field(
+        default_factory=list,
+        sa_column=sqlalchemy.Column(sqlalchemy.JSON, default="[]"),
+    )
+    files: list[dict] = Field(
+        default_factory=list,
+        sa_column=sqlalchemy.Column(sqlalchemy.JSON, default="[]"),
+    )
+
+
+class ForumPost(SQLModel, table=True):
+    """Discussion post."""
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    author_id: UUID = Field(foreign_key="user.id")
+    title: str
+    content: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    upvotes: int = 0
+    downvotes: int = 0
+
+
+class ForumReply(SQLModel, table=True):
+    """Reply to a post."""
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    post_id: UUID = Field(foreign_key="forumpost.id")
+    author_id: UUID = Field(foreign_key="user.id")
+    content: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    upvotes: int = 0
+    downvotes: int = 0
+
+
+class AnalyticsRecord(SQLModel, table=True):
+    """Impact analytics record."""
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    volunteer_id: UUID = Field(foreign_key="user.id")
+    organization_id: UUID = Field(foreign_key="organization.id")
+    opportunity_id: UUID = Field(foreign_key="opportunity.id")
+    hours: int
+    metrics: dict = Field(
+        default_factory=dict,
+        sa_column=sqlalchemy.Column(sqlalchemy.JSON, default="{}"),
+    )
+    created_at: datetime = Field(default_factory=datetime.utcnow)
