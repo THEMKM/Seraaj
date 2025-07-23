@@ -35,6 +35,16 @@ docker compose up --build -d && docker compose exec backend python -m app.seed &
 
 Backend API runs on `http://localhost:8000` and the frontend on `http://localhost:5173`.
 
+### Environment Setup
+
+Copy `.env.example` to `.env` and adjust the values for your deployment:
+
+```bash
+cp .env.example .env
+```
+
+For local development you can instead start from `.env.sample`.
+
 ## Usage Examples
 
 ```python
