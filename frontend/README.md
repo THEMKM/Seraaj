@@ -17,9 +17,10 @@ The app uses Vite with Tailwind CSS and React Router. Available routes include:
 - `/opportunities` – Opportunity search.
 - `/opportunity/:id` – Detail page.
 
-During development, API requests to paths starting with `/api` are proxied to
-`http://localhost:8000`. This avoids CORS issues when running the backend and
-frontend separately.
+During development, the port and backend target are read from `.env`. Copy
+`../.env.example` to `.env` and adjust `FRONTEND_PORT` and `VITE_BACKEND_URL`
+as needed. API requests beginning with `/api` or `/auth` are proxied to
+`VITE_BACKEND_URL`.
 
 There is a dark mode toggle in the corner that persists via `localStorage`.
 Superadmins can access `/settings` to flip feature flags and check system
