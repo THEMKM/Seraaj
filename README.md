@@ -30,7 +30,14 @@ make seed           # populate demo data
 Everything can also be started with a single line:
 
 ```bash
-docker compose up --build -d && docker compose exec backend python -m app.seed && (cd frontend && npm install && npm run dev)
+docker compose up --build -d && (cd frontend && npm install && npm run dev)
+```
+
+`docker compose up --build` seeds the database automatically because `.env.example` enables `RESET_ON_START` and `SEED_DEMO_DATA`.
+To seed again later, run:
+
+```bash
+docker compose exec backend python -m app.seed
 ```
 
 Backend API runs on `http://localhost:8000` and the frontend on `http://localhost:5173`.
