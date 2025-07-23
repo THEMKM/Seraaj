@@ -43,6 +43,9 @@ Copy `.env.example` to `.env` and adjust the values for your deployment:
 cp .env.example .env
 ```
 
+The default Postgres user and password are both `seraaj` as configured in
+`docker-compose.yml`.
+
 For local development you can instead start from `.env.sample`.
 
 ## Usage Examples
