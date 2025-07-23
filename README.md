@@ -23,15 +23,17 @@ Prerequisites: Docker and Node.js 18+.
 
 ```bash
 make dev            # build and start backend, Postgres and Redis
-make seed           # populate demo data
+make seed           # populate demo data (optional)
 (cd frontend && npm install && npm run dev)
 ```
 
 Everything can also be started with a single line:
 
 ```bash
-docker compose up --build -d && docker compose exec backend python -m app.seed && (cd frontend && npm install && npm run dev)
+docker compose up --build -d && docker compose exec backend python seed.py && (cd frontend && npm install && npm run dev)
 ```
+
+Seeding happens automatically on startup when `SEED_DEMO_DATA=true` (set in `.env.example`), so running the script manually is optional.
 
 Backend API runs on `http://localhost:8000` and the frontend on `http://localhost:5173`.
 
