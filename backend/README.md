@@ -36,6 +36,10 @@ Run Celery with beat to compute match scores daily:
 celery -A app.matching worker -B --loglevel=info
 ```
 
+This command runs inside the Docker `worker` service. When you start the stack
+with `make dev` or `docker compose up --build`, the worker boots alongside the
+`backend`, `db` and `redis` services.
+
 ### Testing
 
 `make test` automatically runs the suite inside the Docker container when
