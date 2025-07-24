@@ -162,6 +162,15 @@ def test_apply_closed_opportunity():
     opp_id = closed_opp.json()["id"]
 
     vol_h, uid = _auth_header("volclosed@example.com")
+    resp = client.post(
+        f"/application/{opp_id}/apply",
+        json={},
+        headers=vol_h,
+    )
+    assert resp.status_code == 400
+    assert resp.json()["detail"] == "Opportunity closed"
+
+
 def test_duplicate_application_rejected():
     org_headers, _ = _auth_header("org3@example.com", role="ORG_ADMIN")
     org = client.post("/org", json={"name": "O3", "description": "d"}, headers=org_headers)
