@@ -33,6 +33,9 @@ Everything can also be started with a single line:
 docker compose up --build -d && (cd frontend && npm install && npm run dev)
 ```
 
+The `db` service uses the `pgvector/pgvector:pg16` image with host
+authentication set to `scram-sha-256`.
+
 `docker compose up --build` seeds the database automatically because `.env.example` enables `RESET_ON_START` and `SEED_DEMO_DATA`.
 To seed again later, run:
 
@@ -59,6 +62,8 @@ cp .env.example .env
 
 The default Postgres user and password are both `seraaj` as configured in
 `docker-compose.yml`.
+The container provides the pgvector extension via the `pgvector/pgvector:pg16`
+image.
 
 For local development you can instead start from `.env.sample`.
 Both environment files include a `SECRET_KEY` entry. Ensure the same value is
