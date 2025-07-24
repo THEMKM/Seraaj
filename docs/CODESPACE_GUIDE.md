@@ -13,6 +13,10 @@ Start the stack
 # backend + services (runs in watch-mode)
 docker compose up --build backend db redis
 ```
+The backend relies on the `sentence-transformers/all-mpnet-base-v2` model.
+The Dockerfile pre-downloads this model so the seed script can run offline.
+`docker compose up --build` seeds using the cached model because
+`.env.example` enables `RESET_ON_START` and `SEED_DEMO_DATA`.
 Wait until the Ports panel shows 8000 exposed—that means FastAPI is healthy.
 
 In a second terminal:
