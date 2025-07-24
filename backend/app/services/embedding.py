@@ -18,7 +18,7 @@ def get_model() -> SentenceTransformer:
     if model is None:
         if _ST is None:
             raise RuntimeError("sentence-transformers not installed")
-        model = _ST("all-MiniLM-L6-v2")
+        model = _ST("all-mpnet-base-v2")
     return model
 
 
