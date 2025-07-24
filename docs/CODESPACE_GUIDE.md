@@ -19,8 +19,9 @@ In a second terminal:
 
 ```bash
 cd frontend
+npm install -D @tailwindcss/forms
 npm install
-npm run dev            # Vite on ${FRONTEND_PORT:-5173}
+npm run dev             # Vite on ${FRONTEND_PORT:-5173}
 ```
 
 GitHub will prompt to forward ports 5173 and ${BACKEND_PORT}.
