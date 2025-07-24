@@ -42,6 +42,8 @@ def apply(
     opp = session.get(Opportunity, UUID(opp_id))
     if not opp:
         raise HTTPException(status_code=404, detail="Opportunity not found")
+    if opp.status != OpportunityStatus.OPEN:
+        raise HTTPException(status_code=400, detail="Opportunity closed")
 
     duplicate = session.exec(
         select(Application).where(
