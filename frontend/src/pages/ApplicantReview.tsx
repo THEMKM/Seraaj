@@ -17,7 +17,7 @@ export default function ApplicantReview() {
   const { data: applicants = [] } = useQuery<ApplicantRow[]>({
     queryKey: ["apps"],
     queryFn: async () => {
-      const res = await authFetch("/api/applicants");
+      const res = await authFetch("/applicants");
       if (!res.ok) return [] as ApplicantRow[];
       return res.json();
     },

@@ -16,7 +16,7 @@ export default function OpportunityDetail() {
   const { data } = useQuery<OppDetail | null>({
     queryKey: ["opp", id],
     queryFn: async () => {
-      const res = await authFetch(`/api/opportunity/${id}`);
+      const res = await authFetch(`/opportunity/${id}`);
       if (!res.ok) return null;
       return res.json();
     },

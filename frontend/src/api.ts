@@ -16,7 +16,7 @@ export function getToken(): string | null {
 }
 
 export async function login(email: string, password: string): Promise<string> {
-  const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
+  const res = await fetch(`${BACKEND_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),

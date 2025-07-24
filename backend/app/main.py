@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+import os
 from .config import get_settings
 from .routers import (
     auth,
@@ -21,6 +23,13 @@ from seed import seed_demo_data
 settings = get_settings()
 
 app = FastAPI(title="Seraaj API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[os.environ.get("FRONTEND_URL", "*")],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth)
 app.include_router(volunteer)
