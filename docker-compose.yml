@@ -39,5 +39,22 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+  worker:
+    build: ./backend
+    command: celery -A app.matching worker -B --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://seraaj:seraaj@db:5432/seraaj
+      - SECRET_KEY=changeme
+      - APP_ENV=local
+      - RESET_ON_START=true
+      - SEED_DEMO_DATA=true
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./backend:/code
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
 volumes:
   db_data:

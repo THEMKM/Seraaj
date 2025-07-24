@@ -1,7 +1,7 @@
 .PHONY: dev seed test
 
 dev:  ## spin up full stack locally
-	docker compose up --build backend db redis
+	docker compose up --build backend worker db redis
 
 seed: ## run seed script against running backend
 	docker compose exec backend python seed.py
