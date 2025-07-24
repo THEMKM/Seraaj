@@ -36,7 +36,13 @@ docker compose up --build -d && (cd frontend && npm install && npm run dev)
 The `db` service uses the `pgvector/pgvector:pg16` image with host
 authentication set to `scram-sha-256`.
 
-`docker compose up --build` seeds the database automatically because `.env.example` enables `RESET_ON_START` and `SEED_DEMO_DATA`.
+The backend relies on the `sentence-transformers/all-mpnet-base-v2`
+embedding model. The Dockerfile pre-downloads this model so seeding can
+run without internet access.
+
+`docker compose up --build` seeds the database automatically using the
+cached model because `.env.example` enables `RESET_ON_START` and
+`SEED_DEMO_DATA`.
 To seed again later, run:
 
 ```bash
