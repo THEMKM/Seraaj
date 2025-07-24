@@ -10,6 +10,11 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "seraaj"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   redis:
     image: redis:7
     ports:
@@ -23,12 +28,15 @@ services:
       - APP_ENV=local
       - RESET_ON_START=true
       - SEED_DEMO_DATA=true
+      - BACKEND_PORT=${BACKEND_PORT:-8000}
     volumes:
       - ./backend:/code
     ports:
-      - "${BACKEND_PORT:-8000}:8000"
+      - "${BACKEND_PORT:-8000}:${BACKEND_PORT:-8000}"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
 volumes:
   db_data:

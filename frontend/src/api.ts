@@ -1,4 +1,5 @@
 let token: string | null = null;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export function setToken(t: string) {
   token = t;
@@ -15,7 +16,7 @@ export function getToken(): string | null {
 }
 
 export async function login(email: string, password: string): Promise<string> {
-  const res = await fetch('/api/auth/login', {
+  const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
@@ -32,6 +33,10 @@ export async function authFetch(input: RequestInfo | URL, init: RequestInit = {}
   const headers = new Headers(init.headers);
   const t = getToken();
   if (t) headers.set('Authorization', `Bearer ${t}`);
-  return fetch(input, { ...init, headers });
+  let url: RequestInfo | URL = input;
+  if (typeof input === 'string' && input.startsWith('/')) {
+    url = `${BACKEND_URL}${input}`;
+  }
+  return fetch(url, { ...init, headers });
 }
 

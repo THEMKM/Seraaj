@@ -47,6 +47,10 @@ Backend API runs on `http://localhost:8000` and the frontend on `http://localhos
 
 ### Environment Setup
 
+➡ **Using GitHub Codespaces?** Follow `docs/CODESPACE_GUIDE.md`
+for a step-by-step launch script and the correct `VITE_BACKEND_URL`
+command.
+
 Copy `.env.example` to `.env` and adjust the values for your deployment:
 
 ```bash
@@ -60,6 +64,14 @@ For local development you can instead start from `.env.sample`.
 Both environment files include a `SECRET_KEY` entry. Ensure the same value is
 used across them (the default is `dev-secret`) so that JWTs issued by the
 backend can be verified.
+
+When working in cloud IDEs such as GitHub Codespaces the exposed backend URL
+changes for each session. Set `VITE_BACKEND_URL` to that forwarded address and
+pass it to the frontend build command:
+
+```bash
+VITE_BACKEND_URL=https://8000-<id>.github.dev npm run build
+```
 
 ## Usage Examples
 
