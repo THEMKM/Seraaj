@@ -1,8 +1,10 @@
 import ky from 'ky';
 import { toast } from 'sonner';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 export const api = ky.create({
-  prefixUrl: '/api',
+  prefixUrl: `${BACKEND_URL}/api`,
   hooks: {
     beforeRequest: [
       (req) => {
