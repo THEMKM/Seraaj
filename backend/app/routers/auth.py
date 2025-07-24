@@ -5,7 +5,8 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, status
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
+from uuid import UUID
 from sqlmodel import Session, select
 
 from ..db import get_session
@@ -37,9 +38,11 @@ class UserCreate(BaseModel):
 
 
 class UserRead(BaseModel):
-    id: str
+    id: UUID
     email: EmailStr
     role: UserRole
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserLogin(BaseModel):

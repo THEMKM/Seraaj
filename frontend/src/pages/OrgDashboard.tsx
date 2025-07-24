@@ -15,7 +15,7 @@ export default function OrgDashboard() {
   const { data: opps = [] } = useQuery<OppRow[]>({
     queryKey: ["orgOpps"],
     queryFn: async () => {
-      const res = await authFetch("/api/org/opportunities");
+      const res = await authFetch("/org/opportunities");
       if (res.status === 401) {
         localStorage.removeItem('token');
         navigate('/login');

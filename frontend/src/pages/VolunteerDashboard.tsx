@@ -24,7 +24,7 @@ export default function VolunteerDashboard() {
   const { data: opps = [] } = useQuery<OppRow[]>({
     queryKey: ["opps"],
     queryFn: async () => {
-      const res = await authFetch("/api/opportunity/search?match_me=true");
+      const res = await authFetch("/opportunity/search?match_me=true");
       if (res.status === 401) {
         localStorage.removeItem('token');
         navigate('/login');
@@ -39,7 +39,7 @@ export default function VolunteerDashboard() {
   const { data: apps = [] } = useQuery<ApplicationRow[]>({
     queryKey: ["apps"],
     queryFn: async () => {
-      const res = await authFetch("/api/applications/me");
+      const res = await authFetch("/applications/me");
       if (res.status === 401) {
         localStorage.removeItem('token');
         navigate('/login');

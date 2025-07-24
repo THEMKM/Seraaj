@@ -6,7 +6,7 @@ from uuid import UUID, uuid4
 import enum
 import sqlalchemy
 from pgvector.sqlalchemy import Vector
-from pydantic import EmailStr
+from pydantic import EmailStr, ConfigDict
 from sqlmodel import Field, SQLModel
 
 
@@ -33,6 +33,8 @@ class User(SQLModel, table=True):
     hashed_password: str
     role: UserRole
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class VolunteerProfile(SQLModel, table=True):
     user_id: UUID = Field(foreign_key="user.id", primary_key=True)
@@ -56,6 +58,8 @@ class VolunteerProfile(SQLModel, table=True):
         default=None,
     )
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class Organization(SQLModel, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True)
@@ -63,6 +67,8 @@ class Organization(SQLModel, table=True):
     name: str
     description: str
     website: str | None
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Opportunity(SQLModel, table=True):
@@ -90,6 +96,8 @@ class Opportunity(SQLModel, table=True):
     is_remote: bool = True
     status: OpportunityStatus
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class Application(SQLModel, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True)
@@ -98,6 +106,8 @@ class Application(SQLModel, table=True):
     status: ApplicationStatus
     match_score: float | None = None
     applied_at: datetime = Field(default_factory=datetime.utcnow)
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Conversation(SQLModel, table=True):
@@ -108,6 +118,8 @@ class Conversation(SQLModel, table=True):
         sa_column=sqlalchemy.Column(sqlalchemy.JSON)
     )
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class Message(SQLModel, table=True):
     """Single message in a conversation."""
@@ -117,6 +129,8 @@ class Message(SQLModel, table=True):
     sender_id: UUID = Field(foreign_key="user.id")
     content: str
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Workspace(SQLModel, table=True):
@@ -134,6 +148,8 @@ class Workspace(SQLModel, table=True):
         sa_column=sqlalchemy.Column(sqlalchemy.JSON, default="[]"),
     )
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class ForumPost(SQLModel, table=True):
     """Discussion post."""
@@ -146,6 +162,8 @@ class ForumPost(SQLModel, table=True):
     upvotes: int = 0
     downvotes: int = 0
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class ForumReply(SQLModel, table=True):
     """Reply to a post."""
@@ -157,6 +175,8 @@ class ForumReply(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     upvotes: int = 0
     downvotes: int = 0
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AnalyticsRecord(SQLModel, table=True):
@@ -172,3 +192,5 @@ class AnalyticsRecord(SQLModel, table=True):
         sa_column=sqlalchemy.Column(sqlalchemy.JSON, default="{}"),
     )
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    model_config = ConfigDict(from_attributes=True)

@@ -17,7 +17,7 @@ export default function Opportunities() {
     queryKey: ["search", keywords],
     queryFn: async () => {
       const params = new URLSearchParams({ q: keywords });
-      const res = await authFetch(`/api/opportunity/search?${params.toString()}`);
+      const res = await authFetch(`/opportunity/search?${params.toString()}`);
       if (res.status === 401) {
         localStorage.removeItem('token');
         navigate('/login');

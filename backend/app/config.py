@@ -2,17 +2,19 @@ from pydantic import Field
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    SECRET_KEY: str = "CHANGE_ME"
+    SECRET_KEY: str = "dev-secret"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     # database
-    DATABASE_URL: str = "postgresql+psycopg2://seraaj:seraaj@db:5432/seraaj"
+    DATABASE_URL: str = "sqlite:///./seraaj.db"
 
     # dev flags
     RESET_ON_START: bool = False        # if True & APP_ENV==local → drop & seed
     SEED_DEMO_DATA: bool = False
 
     APP_ENV: str = Field("local", pattern="^(local|staging|prod)$")
+
+    FRONTEND_URL: str | None = None
 
     class Config:
         env_file = ".env"
