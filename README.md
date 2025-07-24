@@ -54,6 +54,20 @@ Seeding happens automatically on startup when `SEED_DEMO_DATA=true` (set in `.en
 
 Backend API runs on `http://localhost:8000` and the frontend on `http://localhost:5173`.
 
+### Updating an Application's Status
+
+Applications are updated via a POST request with a JSON body:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"status": "ACCEPTED"}' \
+  http://localhost:8000/application/<app_id>/status
+```
+
+The `status` field must be one of `PENDING`, `ACCEPTED`, or `REJECTED`.
+
 ### Environment Setup
 
 ➡ **Using GitHub Codespaces?** Follow `docs/CODESPACE_GUIDE.md`

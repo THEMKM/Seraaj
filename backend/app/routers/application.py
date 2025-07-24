@@ -21,6 +21,12 @@ class ApplicationCreate(SQLModel):
 
     status: ApplicationStatus = ApplicationStatus.PENDING
 
+
+class StatusUpdate(SQLModel):
+    """Payload for updating an application's status."""
+
+    status: ApplicationStatus
+
 router = APIRouter(prefix="/application", tags=["application"])
 # Additional router for paths not under /application prefix
 extra_router = APIRouter(tags=["application"])
@@ -75,7 +81,7 @@ def list_applications(
 @router.post("/{app_id}/status", response_model=Application)
 def update_status(
     app_id: str,
-    status: ApplicationStatus,
+    upd: StatusUpdate,
     session: Session = Depends(get_session),
     user=Depends(require_role("ORG_ADMIN")),
 ) -> Application:
@@ -88,7 +94,7 @@ def update_status(
     org = session.get(Organization, opp.org_id)
     if not org or org.owner_id != user.id:
         raise HTTPException(status_code=403, detail="Not authorized")
-    application.status = status
+    application.status = upd.status
     session.add(application)
     session.commit()
     session.refresh(application)

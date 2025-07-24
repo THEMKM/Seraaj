@@ -126,7 +126,11 @@ def test_update_status_and_list_apps():
     assert app_resp.json()["volunteer_id"] == vol_id
     assert app_resp.json()["opportunity_id"] == opp_id
     app_id = app_resp.json()["id"]
-    upd = client.post(f"/application/{app_id}/status", params={"status": "ACCEPTED"}, headers=org_headers)
+    upd = client.post(
+        f"/application/{app_id}/status",
+        json={"status": "ACCEPTED"},
+        headers=org_headers,
+    )
     assert upd.status_code == 200
     assert upd.json()["status"] == "ACCEPTED"
     apps = client.get(f"/application/org/{org_id}", headers=org_headers)
