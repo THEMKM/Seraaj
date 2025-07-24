@@ -9,4 +9,5 @@ SentenceTransformer("all-mpnet-base-v2")
 EOF
 COPY . /code
 ENV APP_ENV=prod
+EXPOSE ${BACKEND_PORT}
 CMD ["python", "-m", "app.main"]
